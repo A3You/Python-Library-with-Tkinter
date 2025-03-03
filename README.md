@@ -52,7 +52,10 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
    ```bash
    pip install mysql-connector-python tkinter
    ```
-3. Ejecutar aplicación principal:
+3. Crea tu config.env basandote en el ejemplo y sustituye
+   tus datos por los necesarios a la conexión:
+
+4. Ejecutar aplicación principal:
    ```python
    python main.py
    ```
@@ -84,6 +87,7 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 │   ├── AutoresController.py
 │   ├── EditorialesController.py
 │   └── AuthController.py
+├── routes.py             # Enrutador
 └── main.py               # Punto de entrada
 ```
 
