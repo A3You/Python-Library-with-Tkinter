@@ -1,5 +1,6 @@
 ```markdown
 # PyLib - Sistema de Gestión Bibliotecaria 📚
+```
 
 Aplicación para administrar libros, autores y 
 editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
@@ -12,7 +13,6 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 
 ![alt text](image.png)
 
-```
 
 ## 🐍 Arquitectura MVC
 
