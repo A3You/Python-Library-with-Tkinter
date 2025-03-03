@@ -8,7 +8,7 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 ## 🗃️ Estructura de la Base de Datos
 ```sql - MariaDb
 # 📚 Diagrama de Relaciones de la Base de Datos
-
+```
 ## Tablas y Relaciones:
 
 ![alt text](image.png)
