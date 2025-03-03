@@ -1,7 +1,8 @@
 ```markdown
 # PyLib - Sistema de Gestión Bibliotecaria 📚
 
-Aplicación para administrar libros, autores y editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
+Aplicación para administrar libros, autores y 
+editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 
 ## 🗃️ Estructura de la Base de Datos
 ```sql - MariaDb
