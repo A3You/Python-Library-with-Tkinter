@@ -1,27 +1,14 @@
 import mysql.connector
-from config_manager import ConfigManager
+from config.config_manager import ConfigManager
 
-class Database:
+class BaseModel:
     
     def __init__(self, tabla):
-        """
-        Inicializa la conexión a la base de datos y define la tabla a gestionar.
-        """
-        # self.host = host
-        # self.user = user
-        # self.password = password
-        # self.database = database
-        # self.tabla = tabla
-        # self.conexion = self.conectar()
-
         self.config = ConfigManager().get_database_config()
         self.tabla = tabla
         self.conexion = self.conectar()
     
     def conectar(self):
-        """
-        Crea la conexión a MySQL.
-        """
         try:
             conexion = mysql.connector.connect(**self.config)
             return conexion
@@ -110,3 +97,4 @@ class Database:
         if self.conexion:
             self.conexion.close()
             print("Conexión cerrada.")
+
