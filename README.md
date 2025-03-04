@@ -14,14 +14,21 @@ CREATE TABLE IF NOT EXISTS libros_autores
 CREATE TABLE IF NOT EXISTS roles
 CREATE TABLE IF NOT EXISTS usuarios
 ```
-# 📚 Diagrama de Relaciones de la Base de Datos
+## 📚 Diagrama de Relaciones de la Base de Datos
 
-## Tablas y Relaciones:
+### Tablas y Relaciones:
 
 ![alt text](image.png)
 
+## 🗔 Vistas Propuestas
 
-## 🐍 Arquitectura MVC
+### Vista de Libros:
+
+![alt text](vista_libros.png)
+
+
+
+### 🐍 Arquitectura MVC
 
 
 **Planificación de Interfaces:**
