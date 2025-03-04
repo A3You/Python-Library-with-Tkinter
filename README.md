@@ -7,8 +7,15 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 
 ## 🗃️ Estructura de la Base de Datos
 ```sql - MariaDb
-# 📚 Diagrama de Relaciones de la Base de Datos
+CREATE TABLE IF NOT EXISTS autores
+CREATE TABLE IF NOT EXISTS editoriales
+CREATE TABLE IF NOT EXISTS libros
+CREATE TABLE IF NOT EXISTS libros_autores
+CREATE TABLE IF NOT EXISTS roles
+CREATE TABLE IF NOT EXISTS usuarios
 ```
+# 📚 Diagrama de Relaciones de la Base de Datos
+
 ## Tablas y Relaciones:
 
 ![alt text](image.png)
@@ -52,10 +59,13 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
    ```bash
    pip install mysql-connector-python tkinter
    ```
-3. Crea tu config.env basandote en el ejemplo y sustituye
+3. Entra a la carpeta principal y ejecuta docker-compose up -d --build
+   Es necesario para levantar la base de datos y phpmyadmin como cliente para insertar
+   consultas sql.
+4. Crea tu config.env basandote en el ejemplo y sustituye
    tus datos por los necesarios a la conexión:
 
-4. Ejecutar aplicación principal:
+5. Ejecutar aplicación principal:
    ```python
    python main.py
    ```
@@ -73,20 +83,16 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 │   └── database.py       # Configuración de conexión a DB
 ├── 📂 models
 │   ├── Autor.py
-│   ├── Editorial.py
-│   ├── Libro.py
-│   └── Usuarios.py
+│   ├── Editorial.py 
+│   └── Libro.py
 ├── 📂 views
 │   ├── libros.py
 │   ├── autores.py
-│   ├── editoriales.py
-│   ├── login.py
-│   └── register.py
+│   └── editoriales.py
 ├── 📂 controllers
 │   ├── LibrosController.py
 │   ├── AutoresController.py
-│   ├── EditorialesController.py
-│   └── AuthController.py
+│   └── EditorialesController.py
 ├── routes.py             # Enrutador
 └── main.py               # Punto de entrada
 ```
@@ -95,4 +101,5 @@ editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 1. **Usuario** interactúa con la vista (ej: formulario de libro)  
 2. **Controlador** recibe la acción y valida datos  
 3. **Modelo** ejecuta operaciones en la base de datos  
-4. **Vista** actualiza la interfaz con los cambios  
+4. **Vista** actualiza la interfaz con los cambios
+

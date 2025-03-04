@@ -9,11 +9,11 @@ class ConfigManager:
 
     def get_database_config(self):
         return {
-            "host": self.config.get("database", "host", fallback="localhost"),
-            "user": self.config.get("database", "user", fallback="root"),
-            "password": self.config.get("database", "password", fallback="root"),
-            "database": self.config.get("database", "database", fallback="bd_pylib"),
-            "use_pure": self.config.getboolean("database", "use_pure", fallback=False)
+            "host": self.config.get("database", "host"),
+            "user": self.config.get("database", "user"),
+            "password": self.config.get("database"),
+            "database": self.config.get("database"),
+            "use_pure": self.config.getboolean("database", "use_pure")
         }
     
     def probar_conexion(self):
