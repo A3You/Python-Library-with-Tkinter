@@ -3,17 +3,17 @@ from tkinter.ttk import *
 from .styles import styles
 
 
-class LibrosView(Frame):
+class CreateView(Frame):
     # styles()
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
 
         # Label
-        self.label = Label(self, text="Libros a la venta", font=("Poppins", 24))
+        self.label = Label(self, text="Insertar Libro Nuevo", font=("Poppins", 18))
         self.label.pack(pady=20)
 
-        # Tabla
+        # Formulario
         self.tabla = Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
         self.tabla.column("id", width=50, anchor="center")
         self.tabla.column("titulo", width=250, anchor="center")

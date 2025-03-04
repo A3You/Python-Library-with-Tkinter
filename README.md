@@ -62,10 +62,13 @@ CREATE TABLE IF NOT EXISTS usuarios
 3. Entra a la carpeta principal y ejecuta docker-compose up -d --build
    Es necesario para levantar la base de datos y phpmyadmin como cliente para insertar
    consultas sql.
-4. Crea tu config.env basandote en el ejemplo y sustituye
+
+4. La consulta SQL esta en este archivo ![tabla sql](table-autores.sql)
+
+5. Crea tu config.env basandote en el ejemplo y sustituye
    tus datos por los necesarios a la conexión:
 
-5. Ejecutar aplicación principal:
+6. Ejecutar aplicación principal:
    ```python
    python main.py
    ```
