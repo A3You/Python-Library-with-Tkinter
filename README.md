@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS usuarios
    Es necesario para levantar la base de datos y phpmyadmin como cliente para insertar
    consultas sql.
 
-4. La consulta SQL esta en este archivo ![tabla sql](table-autores.sql)
+4. La consulta SQL esta en este archivo ➡️ [tabla sql](table-autores.sql) 
 
 5. Crea tu config.env basandote en el ejemplo y sustituye
    tus datos por los necesarios a la conexión:
