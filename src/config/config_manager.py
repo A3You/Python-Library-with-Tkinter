@@ -1,19 +1,37 @@
-import os
-from dotenv import load_dotenv
+import configparser
+import mysql.connector
 
 class ConfigManager:
-    def __init__(self):
-        load_dotenv("config.env")
+    file = './config.ini'
+    def __init__(self, config_file="config.ini"):
+        self.config = configparser.ConfigParser()
+        self.config.read(config_file)
 
     def get_database_config(self):
         return {
-            "host": os.getenv("DB_HOST"),
-            "user": os.getenv("DB_USER"),
-            "password": os.getenv("DB_PASSWORD"),
-            "database": os.getenv("DB_NAME"),
-            "use_pure": os.getenv("DB_USE_PURE")
+            "host": self.config.get("database", "host", fallback="localhost"),
+            "user": self.config.get("database", "user", fallback="root"),
+            "password": self.config.get("database", "password", fallback="root"),
+            "database": self.config.get("database", "database", fallback="bd_pylib"),
+            "use_pure": self.config.getboolean("database", "use_pure", fallback=False)
         }
     
-    def set_database(self, new_database):
-        os.environ["DB_NAME"] = new_database
-        print(f"Base de datos cambiada a: {new_database}")
+    def probar_conexion(self):
+        """
+        Prueba la conexión con la base de datos y devuelve un mensaje de éxito o error.
+        """
+        try:
+            conexion = mysql.connector.connect(**self.get_database_config())
+            if conexion.is_connected():
+                print("Conexión exitosa.")
+            else:
+                print("No se pudo establecer la conexión.")
+        except mysql.connector.Error as err:
+            print(f"Error de conexión: {err}")
+        finally:
+            if 'conexion' in locals() and conexion.is_connected():
+                conexion.close()
+
+prueba = ConfigManager()
+prueba.probar_conexion()
+
