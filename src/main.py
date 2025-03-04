@@ -1,13 +1,23 @@
 import tkinter as tk
+from models.Libro import Libro
+from views.libros.LibrosView import LibrosView
+from controllers.LibrosController import LibrosController
 
 
-class Main(tk.TK):
+class Libros(tk.Tk):
     def __init__(self):
         super().__init__()
+
+        self.title("Libros")
+    
+        self.view = LibrosView(self)
+        self.controller = LibrosController(self.view, Libro()) 
+
+        self.controller.listar_libros()
 
 
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.mainloop()
+    libros = Libros()
+    libros.mainloop()

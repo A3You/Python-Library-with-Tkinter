@@ -1,5 +1,7 @@
 import mysql.connector
-from ..config.config_manager import ConfigManager
+import sys
+sys.path.append("..")
+from config.config_manager import ConfigManager
 
 class BaseModel:
     

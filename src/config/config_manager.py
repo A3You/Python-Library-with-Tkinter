@@ -1,9 +1,9 @@
+import os
 import configparser
 import mysql.connector
 
 class ConfigManager:
-    file = './config.ini'
-    def __init__(self, config_file="config.ini"):
+    def __init__(self, config_file=os.path.join(os.path.dirname(__file__), 'config.ini')):
         self.config = configparser.ConfigParser()
         self.config.read(config_file)
 
@@ -11,8 +11,8 @@ class ConfigManager:
         return {
             "host": self.config.get("database", "host"),
             "user": self.config.get("database", "user"),
-            "password": self.config.get("database"),
-            "database": self.config.get("database"),
+            "password": self.config.get("database", "password"),  # Faltaba el parámetro "option"
+            "database": self.config.get("database", "database"),  # Faltaba el parámetro "option"
             "use_pure": self.config.getboolean("database", "use_pure")
         }
     
