@@ -1,27 +1,26 @@
-import tkinter as tk
-from tkinter import ttk
-class LibrosView(ttk.Frame):
+from tkinter import *
+from tkinter.ttk import *
+class LibrosView(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-    
-        #Label
-        self.label = tk.Label(self, text="Libros a la venta")
+        self.parent = parent
+        # Label
+        self.label = Label(self, text="Libros a la venta", font=("Poppins", 24))
         self.label.pack()
-        #Tabla
-        self.tabla = ttk.Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
+
+        # Tabla
+        self.tabla = Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
+        self.tabla.column("id", width=50, anchor="center")
+        self.tabla.column("titulo", width=250, anchor="center")
+        self.tabla.column("precio", width=100, anchor="center")
+        self.tabla.column("editorial", width=150, anchor="center")
+        self.tabla.column("autores", width=200, anchor="center")
         self.tabla.heading("id", text="ID")
-        self.tabla.heading("titulo", text="Título")
+        self.tabla.heading("titulo", text="Título")
         self.tabla.heading("precio", text="Precio")
         self.tabla.heading("editorial", text="Editorial")
-        self.tabla.heading("autores", text="Autor")
+        self.tabla.heading("autores", text="Autores")
         self.tabla.pack()
-        #Botones
-        # self.boton_crear = tk.Button(self, text="Crear libro", command=self.crear_libro)
-        # self.boton_crear.pack()
-        # self.boton_modificar = tk.Button(self, text="Modificar libro", command=self.modificar_libro)
-        # self.boton_modificar.pack()
-        # self.boton_eliminar = tk.Button(self, text="Eliminar libro", command=self.eliminar_libro)
-        # self.boton_eliminar.pack()
 
     def mostrar_libros(self, libros):
         """
@@ -40,4 +39,5 @@ class LibrosView(ttk.Frame):
                     libro["autores"],
                 ),
             )
+        self.pack()
 

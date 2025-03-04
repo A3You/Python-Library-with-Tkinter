@@ -9,13 +9,12 @@ class Libros(tk.Tk):
         super().__init__()
 
         self.title("Libros")
+        self.geometry("800x400")
     
         self.view = LibrosView(self)
-        self.controller = LibrosController(self.view, Libro()) 
+        self.controller = LibrosController(self.view, Libro())
 
         self.controller.listar_libros()
-
-
 
 
 if __name__ == "__main__":
