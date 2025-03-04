@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: mysql_pylib
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bd_pylib
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: contrasena
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_pylib
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8085:80"
+    depends_on:
+      - mysql
+
+volumes:
+  db_data:
+
