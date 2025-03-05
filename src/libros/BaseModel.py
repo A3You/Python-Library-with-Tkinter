@@ -2,45 +2,45 @@ import mysql.connector
 from config.config_manager import ConfigManager
 
 class BaseModel:
-    
     def __init__(self, tabla):
         self.config = ConfigManager().get_database_config()
         self.tabla = tabla
-        self.conexion = self.conectar()
+        # No inicialices la conexión aquí
     
-    def conectar(self):
+    def _get_connection(self):
+        """Crea una nueva conexión para cada operación."""
         try:
-            conexion = mysql.connector.connect(**self.config)
-            return conexion
+            return mysql.connector.connect(**self.config)
         except mysql.connector.Error as err:
             print(f"Error de conexión: {err}")
             return None
 
     def ejecutar_consulta(self, consulta, valores=None, fetch=False, dictionary=True):
-        """
-        Ejecuta una consulta SQL genérica.
-        """
-        if not self.conexion:
+        conexion = self._get_connection()  # Nueva conexión cada vez
+        if not conexion:
             print("No hay conexión a la base de datos.")
             return None
 
-        cursor = self.conexion.cursor(dictionary=dictionary)
+        cursor = conexion.cursor(dictionary=dictionary)
         try:
             if valores:
                 cursor.execute(consulta, valores)
             else:
                 cursor.execute(consulta)
+            
             if fetch:
                 resultado = cursor.fetchall()
-                return resultado
             else:
-                self.conexion.commit()
-                return cursor.lastrowid  # Retorna el ID del último registro insertado
+                conexion.commit()
+                resultado = cursor.lastrowid
+
+            return resultado
         except mysql.connector.Error as err:
             print(f"Error en la consulta: {err}")
             return None
         finally:
             cursor.close()
+            conexion.close()  # Cierra la conexión después de cada uso
 
     def crear_registro(self, datos):
         """

@@ -5,37 +5,27 @@ from tkinter.ttk import *
 class LibrosView(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.controller = None  # Inicializa el controlador como None
-        self._create_widgets()
+        self.controller = None  
     
     def set_controller(self, controller):
         """Asigna el controlador a la vista."""
         self.controller = controller
 
-    def _create_widgets(self):
-        # Tabla
-        self.tabla = Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
-        self.tabla.heading("id", text="ID")
-        self.tabla.heading("titulo", text="Título")
-        self.tabla.heading("precio", text="Precio")
-        self.tabla.heading("editorial", text="Editorial")
-        self.tabla.heading("autores", text="Autores")
-        self.tabla.pack(fill="x", expand=True, padx=10, pady=10)
-        # self._mostrar_libros([])  # Muestra una lista vacía inicialmente
-
-        # Controles
-        btn_frame = Frame(self)
-        btn_frame.pack(padx=10, pady=5)
-
-        # Botones (descomentados y corregidos)
-        Button(btn_frame, text="Crear Libro", command=self._new_product).pack(side="left", padx=5)
-        Button(btn_frame, text="Modificar Libro", command=self._edit_product).pack(side="left", padx=5)
-        Button(btn_frame, text="Eliminar Libro", command=self._delete_product).pack(side="left", padx=5)
-
     def _mostrar_libros(self, libros):
         """
         Muestra los datos de los libros en la tabla.
         """
+        # Tabla
+        self.tabla = Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
+        self.tabla.column("id", width=5 )
+        self.tabla.heading("id", text="ID")
+        self.tabla.heading("titulo", text="Título")
+        self.tabla.column("precio", width=10 )
+        self.tabla.heading("precio", text="Precio")
+        self.tabla.heading("editorial", text="Editorial")
+        self.tabla.heading("autores", text="Autores")
+        self.tabla.pack(fill="x", expand=True, padx=10, pady=10)
+
         self.tabla.delete(*self.tabla.get_children())
         for libro in libros:
             self.tabla.insert(
@@ -50,11 +40,18 @@ class LibrosView(Frame):
                 ),
             )
         self.pack(fill="x", expand=True)
+        
+        btn_frame = Frame(self)
+        btn_frame.pack(padx=10, pady=5)
+        # Botones (descomentados y corregidos)
+        Button(btn_frame, text="Crear Libro", command=self.crear).pack(side="left", padx=5)
+        Button(btn_frame, text="Modificar Libro", command=self._edit_product).pack(side="left", padx=5)
+        Button(btn_frame, text="Eliminar Libro", command=self._delete_product).pack(side="left", padx=5)
 
-    def _new_product(self):
+    def crear(self):
         """Maneja la creación de un nuevo libro."""
         if self.controller:
-            self.controller.show_form_view()
+            self.controller.crear_libro()
 
     def _edit_product(self):
         """Maneja la edición de un libro existente."""

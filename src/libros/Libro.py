@@ -25,7 +25,7 @@ class Libro(BaseModel):
             INSERT INTO libros_autores (id_libro, id_autor) 
             VALUES (%s, %s)
             """
-            self.ejecutar_consulta(consulta_autor, (libro_id, autor), fetch=True)
+            self.ejecutar_consulta(consulta_autor, (libro_id, autor))
     
     def listar_autores(self):
         consulta = "SELECT id, apellidos, nombre FROM autores"
@@ -34,3 +34,7 @@ class Libro(BaseModel):
     def listar_editoriales(self):
         consulta = "SELECT id, nombre FROM editoriales"
         return self.ejecutar_consulta(consulta, fetch=True)
+    
+    def eliminar_registro(self, id):
+        consulta = "DELETE FROM libros_autores WHERE id_libro = %s; DELETE FROM libros WHERE id = %s;"
+        return self.ejecutar_consulta(consulta, (id, id))

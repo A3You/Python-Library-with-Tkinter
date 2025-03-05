@@ -20,19 +20,31 @@ class LibrosController:
         # Muestra la vista inicial
         self.show_list_view()
     
-    def listar_libros(self):
-        """Muestra la vista de lista de libros."""
+    
+    def show_list_view(self):
         self.base_view.switch_frame(LibrosView)
         self.refresh_data()
+
+    def show_form_view(self, libro_id=None):
+        try:
+            self.base_view.switch_frame(FormView)
+            if libro_id:
+                libro = self.model.buscar_por_id(libro_id)
+                if libro:
+                    self.form_view.load_data(libro)
+        except Exception as e:
+            print(f"Error al mostrar el formulario: {e}")
+            self.show_error("Error de conexión con la base de datos")
     
     def refresh_data(self):
-        """Actualiza la lista de libros en la vista."""
         libros = self.model.listar_todos()
-        if libros:
+        if libros is not None:  # Verifica si hay datos
             self.libros_view.update_list(libros)
         else:
-            print("No se encontraron libros en la base de datos.")  # Depuración
+            print("Error al cargar los datos de la base de datos")
+            self.show_error("No se pudo conectar a la base de datos")
         
+
     def crear_libro(self):
         """Prepara el formulario para crear un nuevo libro."""
         self.form_view.current_id = None
@@ -56,22 +68,9 @@ class LibrosController:
         self.show_list_view()
     
     def eliminar_libro(self, id):
-        """Elimina un libro por su ID."""
         self.model.eliminar_registro(id)
-        self.refresh_data()
+        self.show_list_view()
     
-    def show_form_view(self, libro_id=None):
-        """Muestra el formulario para editar un libro existente."""
-        self.base_view.switch_frame(FormView)
-        if libro_id:
-            libro = self.model.buscar_por_id(libro_id)
-            if libro:
-                self.form_view.load_data(libro)
-    
-    def show_list_view(self):
-        """Muestra la vista de lista de libros."""
-        self.base_view.switch_frame(LibrosView)
-        self.refresh_data()
     
     def show_error(self, message):
         """Muestra un mensaje de error."""
