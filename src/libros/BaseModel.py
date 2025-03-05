@@ -1,6 +1,4 @@
 import mysql.connector
-import sys
-sys.path.append("..")
 from config.config_manager import ConfigManager
 
 class BaseModel:
@@ -47,8 +45,7 @@ class BaseModel:
     def crear_registro(self, datos):
         """
         Inserta un nuevo registro en la tabla.
-        datos: Diccionario con los valores a insertar. Ejemplo:
-        {"nombre": "Juan Pérez", "edad": 30, "email": "juan@email.com"}
+        datos: Diccionario con los valores a insertar. 
         """
         columnas = ", ".join(datos.keys())
         valores = tuple(datos.values())
