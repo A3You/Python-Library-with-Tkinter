@@ -17,9 +17,6 @@ class BaseView(Tk):
         # Crea el nuevo frame
         new_frame = frame_class(self)
         self.current_frame = new_frame
-        
-        # Muestra el nuevo frame
-        self.current_frame.pack(expand=True, fill=BOTH)
     
     def set_controller(self, controller):
         """

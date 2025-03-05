@@ -90,20 +90,15 @@ CREATE TABLE IF NOT EXISTS usuarios
 ```
 📦 PyLib
 ├── 📂 config
+│   ├── config.ini
 │   └── database.py       # Configuración de conexión a DB
-├── 📂 models
-│   ├── Autor.py
-│   ├── Editorial.py 
+├── 📂 libros
+│   ├── BaseModel.py
+│   ├── LibrosView.py
+│   ├── FormView.py
+│   ├── LibrosController.py 
 │   └── Libro.py
-├── 📂 views
-│   ├── libros.py
-│   ├── autores.py
-│   └── editoriales.py
-├── 📂 controllers
-│   ├── LibrosController.py
-│   ├── AutoresController.py
-│   └── EditorialesController.py
-├── routes.py             # Enrutador
+├── BaseView.py             # Vista Base encargada de Transición entre Frames
 └── main.py               # Punto de entrada
 ```
 
