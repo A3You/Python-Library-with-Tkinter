@@ -18,25 +18,25 @@ class FormView(Frame):
         form_frame = Frame(self)
         form_frame.pack(pady=20, padx=20, fill=X)
         
-        Label(form_frame, text="Nombre:").grid(row=0, column=0, sticky=W)
-        self.name_entry = Entry(form_frame)
-        self.name_entry.grid(row=0, column=1, sticky=EW)
+        Label(form_frame, text="Nombre:").pack()
+        self.titulo_entry = Entry(form_frame)
+        self.titulo_entry.pack()
         
-        Label(form_frame, text="Precio:").grid(row=1, column=0, sticky=W)
+        Label(form_frame, text="Precio:").pack()
         self.price_entry = Entry(form_frame)
-        self.price_entry.grid(row=1, column=1, sticky=EW)
+        self.price_entry.pack()
         
-        Label(form_frame, text="Editorial (ID):").grid(row=2, column=0, sticky=W)
+        Label(form_frame, text="Editorial (ID):").pack()
         self.editorial_entry = Entry(form_frame)
-        self.editorial_entry.grid(row=2, column=1, sticky=EW)
+        self.editorial_entry.pack()
 
-        Label(form_frame, text="Fecha Publicación:").grid(row=3, column=0, sticky=W)
+        Label(form_frame, text="Fecha Publicación:").pack()
         self.fecha_entry = Entry(form_frame)
-        self.fecha_entry.grid(row=3, column=1, sticky=EW)
+        self.fecha_entry.pack()
         
-        Label(form_frame, text="Autores (IDs separados por coma):").grid(row=4, column=0, sticky=W)
+        Label(form_frame, text="Autores (IDs separados por coma):").pack()
         self.autores_entry = Entry(form_frame)
-        self.autores_entry.grid(row=4, column=1, sticky=EW)
+        self.autores_entry.pack()
         
         # Botones
         btn_frame = Frame(self)
@@ -47,21 +47,21 @@ class FormView(Frame):
         
     def _save(self):
         data = {
-            'titulo': self.name_entry.get(),  # Cambia 'name' a 'titulo'
+            'titulo': self.titulo_entry.get(),  # Cambia 'name' a 'titulo'
             'precio': self.price_entry.get(),
             'editorial': self.editorial_entry.get(),
             'fecha_publicacion': self.fecha_entry.get(),
-            'autores': self.autores_entry.get()
+            'autores': [int(a) for a in self.autores_entry.get().split(',')]
         }
         if self.controller:
             if self.current_id:
-                self.controller.guardar_libro(  # Usa guardar_libro, no update_product
+                self.controller.guardar_libro(  
                     self.current_id,
                     data['titulo'],
                     data['precio'],
                     data['editorial'],
                     data['fecha_publicacion'],
-                    data['autores'].split(',')
+                    data['autores']
                 )
             else:
                 self.controller.guardar_libro(
@@ -69,20 +69,26 @@ class FormView(Frame):
                     data['precio'],
                     data['editorial'],
                     data['fecha_publicacion'],
-                    data['autores'].split(',')
+                    data['autores']
                 )
         
     def _cancel(self):
         if self.controller:
-            self.controller.listar_libros()
-            
+            self.controller.show_list_view()
+
     def load_data(self, libro):
-        self.current_id = libro['id']
-        self.name_entry.insert(0, libro.get('titulo', ''))
+        # Asegúrate de que 'libro' es un diccionario
+        self.current_id = libro[0]["id"] if isinstance(libro, list) else libro["id"]
+        self.titulo_entry.insert(0, libro[0]["titulo"] if isinstance(libro, list) else libro["titulo"])
+        # ... (repite para los demás campos)
+        self.titulo_entry.delete(0, END)
+        self.titulo_entry.insert(0, libro.get('titulo', ''))
+        self.price_entry.delete(0, END)
         self.price_entry.insert(0, str(libro.get('precio', '')))
+        self.editorial_entry.delete(0, END)
         self.editorial_entry.insert(0, str(libro.get('id_editorial', '')))
+        self.fecha_entry.delete(0, END)
         self.fecha_entry.insert(0, libro.get('fecha_publicacion', ''))
-        # Cargar autores (requiere consulta adicional)
-        autores = self.controller.model.obtener_autores_libro(self.current_id)
-        self.autores_entry.insert(0, ", ".join(str(a['id']) for a in autores))
+        self.autores_entry.delete(0, END)
+        self.autores_entry.insert(0, ", ".join(str(a['id']) for a in libro['autores']))
 

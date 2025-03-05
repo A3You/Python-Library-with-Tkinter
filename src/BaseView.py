@@ -8,9 +8,9 @@ class BaseView(Tk):
         self.title("Libros")
         self.geometry("800x400")
         # Frame actual
+        self.controller = None
         self.current_frame = None
         # Controlador asociado a la vista
-        self.controller = None
         # Menu principal
         menubar = Menu(self)
         self.config(menu=menubar)
@@ -35,12 +35,16 @@ class BaseView(Tk):
         editoriales_menu.add_command(label="Crear")
         menubar.add_cascade(label="Editoriales", menu=editoriales_menu)
     
+
     def switch_frame(self, frame_class):
-        if self.current_frame:
-            self.current_frame.destroy()  # Destruye el frame actual
+        if self.current_frame is not None:
+            self.current_frame.pack_forget()
         self.current_frame = frame_class(self)
-        self.current_frame.pack(fill=BOTH, expand=True)  # Empaqueta el nuevo frame
-        
+        self.current_frame.pack(fill=BOTH, expand=True)
+        # Asigna el controlador al nuevo frame
+        if self.controller and hasattr(self.current_frame, "set_controller"):
+            self.current_frame.set_controller(self.controller)
+
     def _confirm_exit(self):
         if messagebox.askokcancel("Salir", "¿Desea salir?"):
             if self.controller:
@@ -54,3 +58,4 @@ class BaseView(Tk):
             controller: El controlador que manejará la lógica de la vista.
         """
         self.controller = controller
+

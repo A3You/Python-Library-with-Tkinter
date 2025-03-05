@@ -7,42 +7,37 @@ from tkinter import messagebox
 class LibrosController:
     def __init__(self, base_view):
         self.base_view = base_view
-        self.model = Libro()  # Inicializa el modelo
-
-        # Inicializa las vistas
+        self.model = Libro()
+        # Inicializa las vistas y asigna el controlador
         self.libros_view = LibrosView(self.base_view)
         self.form_view = FormView(self.base_view)
-
-        # Asigna el controlador a las vistas
         self.libros_view.set_controller(self)
         self.form_view.set_controller(self)
-
-        # Muestra la vista inicial
         self.show_list_view()
-    
-    
+
     def show_list_view(self):
         self.base_view.switch_frame(LibrosView)
+        self.base_view.current_frame.set_controller(self)  # Actualiza el controlador
         self.refresh_data()
+
+    def refresh_data(self):
+        libros = self.model.listar_todos()
+        if libros is not None:
+            self.libros_view.update_list(libros)  # Ahora existe el atributo
+        else:
+            self.show_error("Error al cargar datos")
 
     def show_form_view(self, libro_id=None):
         try:
             self.base_view.switch_frame(FormView)
             if libro_id:
-                libro = self.model.buscar_por_id(libro_id)
+                libro = self.model.mostrar_libro(libro_id)
                 if libro:
                     self.form_view.load_data(libro)
         except Exception as e:
             print(f"Error al mostrar el formulario: {e}")
             self.show_error("Error de conexión con la base de datos")
     
-    def refresh_data(self):
-        libros = self.model.listar_todos()
-        if libros is not None:  # Verifica si hay datos
-            self.libros_view.update_list(libros)
-        else:
-            print("Error al cargar los datos de la base de datos")
-            self.show_error("No se pudo conectar a la base de datos")
         
 
     def crear_libro(self):
