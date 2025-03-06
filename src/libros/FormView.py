@@ -28,6 +28,10 @@ class FormView(Frame):
         self.price_entry.pack()
         
         Label(form_frame, text="Editorial (ID):").pack()
+        self.id_editorial_entry = Entry(form_frame)
+        self.id_editorial_entry.pack()
+
+        Label(form_frame, text="Editorial:").pack()
         self.editorial_entry = Entry(form_frame)
         self.editorial_entry.pack()
 
@@ -38,6 +42,20 @@ class FormView(Frame):
         Label(form_frame, text="Autores (IDs separados por coma):").pack()
         self.autores_entry = Entry(form_frame)
         self.autores_entry.pack()
+
+        # try:
+        #     self.current_id = self.item_id['id']   
+        #     self.titulo_entry.insert(0, 'titulo')
+        
+        #     self.price_entry.insert(0, str(self.item_id.get('precio', '')))
+            
+        #     self.id_editorial_entry.insert(0, str(self.item_id.get('id_editorial', '')))
+
+        #     self.editorial_entry.insert(0, str(self.item_id.get('editorial', '')))
+
+        #     self.fecha_entry.insert(0, self.item_id.get('fecha_publicacion', ''))
+
+        #     self.fecha_entry.insert(0, self.item_id.get('autores', ''))
         
         # Botones
         btn_frame = Frame(self)
@@ -78,18 +96,27 @@ class FormView(Frame):
             self.controller.show_list_view()
 
     def load_data(self, libro):
-        # Asegúrate de que 'libro' es un diccionario
-        self.current_id = libro[0]["id"] if isinstance(libro, list) else libro["id"]
-        self.titulo_entry.insert(0, libro[0]["titulo"] if isinstance(libro, list) else libro["titulo"])
-        # ... (repite para los demás campos)
-        self.titulo_entry.delete(0, END)
-        self.titulo_entry.insert(0, libro.get('titulo', ''))
-        self.price_entry.delete(0, END)
-        self.price_entry.insert(0, str(libro.get('precio', '')))
-        self.editorial_entry.delete(0, END)
-        self.editorial_entry.insert(0, str(libro.get('id_editorial', '')))
-        self.fecha_entry.delete(0, END)
-        self.fecha_entry.insert(0, libro.get('fecha_publicacion', ''))
-        self.autores_entry.delete(0, END)
-        self.autores_entry.insert(0, ", ".join(str(a['id']) for a in libro['autores']))
+        print(f"Creando Formulario {libro[0]['id']}")
+        try:
+            # Asegúrate de que 'libro' es un diccionario
+            if isinstance(libro, list):
+                libro = libro[0]
+                titulo = libro['titulo']
+                print(titulo)
+                print(self.titulo_entry.get())
+            self.current_id = libro["id"]
+            self.titulo_entry.delete(0, END)
+            self.titulo_entry.insert(1, titulo)
+            self.price_entry.delete(0, END)
+            self.price_entry.insert(0, str(libro.get('precio', '')))
+            self.id_editorial_entry.delete(0, END)
+            self.id_editorial_entry.insert(0, str(libro.get('id_editorial', '')))
+            self.editorial_entry.delete(0, END)
+            self.editorial_entry.insert(0, str(libro.get('editorial', '')))
+            self.fecha_entry.delete(0, END)
+            self.fecha_entry.insert(0, libro.get('fecha_publicacion', ''))
+            self.autores_entry.delete(0, END)
+            self.fecha_entry.insert(0, libro.get('autores', ''))
+        except AttributeError as e:
+            print(f"Error al mostrar el formulario: {e}")
 

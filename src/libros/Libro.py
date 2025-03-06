@@ -30,12 +30,12 @@ class Libro(BaseModel):
     def mostrar_libro(self, id):
         consulta = """
             SELECT libros.id, libros.titulo, libros.precio, libros.id_editorial, 
-            (SELECT GROUP_CONCAT(apellidos, ', ', nombre SEPARATOR '; ') FROM autores WHERE id IN (SELECT id_autor FROM libros_autores WHERE id_libro = libros.id)) AS autores,
+            (SELECT GROUP_CONCAT(apellidos, ', ', nombre SEPARATOR '; ') FROM autores WHERE id IN (SELECT id_autor FROM libros_autores WHERE id_libro = %s)) AS autores,
             (SELECT nombre FROM editoriales WHERE id = libros.id_editorial) AS editorial
             FROM libros
             WHERE libros.id = %s
         """
-        return self.ejecutar_consulta(consulta, (id,), fetch=True)
+        return self.ejecutar_consulta(consulta, (id, id), fetch=True)
 
 
     def listar_autores(self):
