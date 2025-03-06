@@ -4,9 +4,8 @@ from tkinter.ttk import *
 
 class FormView(Frame):
     # styles()
-    def __init__(self, parent, item_id=None):
+    def __init__(self, parent):
         super().__init__(parent)
-        self.item_id = item_id
         self.controller = None
         self.current_id = None
         self._create_widgets()
@@ -42,20 +41,6 @@ class FormView(Frame):
         Label(form_frame, text="Autores (IDs separados por coma):").pack()
         self.autores_entry = Entry(form_frame)
         self.autores_entry.pack()
-
-        # try:
-        #     self.current_id = self.item_id['id']   
-        #     self.titulo_entry.insert(0, 'titulo')
-        
-        #     self.price_entry.insert(0, str(self.item_id.get('precio', '')))
-            
-        #     self.id_editorial_entry.insert(0, str(self.item_id.get('id_editorial', '')))
-
-        #     self.editorial_entry.insert(0, str(self.item_id.get('editorial', '')))
-
-        #     self.fecha_entry.insert(0, self.item_id.get('fecha_publicacion', ''))
-
-        #     self.fecha_entry.insert(0, self.item_id.get('autores', ''))
         
         # Botones
         btn_frame = Frame(self)
@@ -97,26 +82,30 @@ class FormView(Frame):
 
     def load_data(self, libro):
         print(f"Creando Formulario {libro[0]['id']}")
-        try:
-            # Asegúrate de que 'libro' es un diccionario
+        try:            # Asegúrate de que 'libro' es un diccionario
             if isinstance(libro, list):
                 libro = libro[0]
                 titulo = libro['titulo']
-                print(titulo)
-                print(self.titulo_entry.get())
+                precio = libro['precio']
+                id_editorial = libro['id_editorial']
+                editorial = libro['editorial']
+                fecha_publicacion = libro['fecha_publicacion']
+                autores = libro['autores']
             self.current_id = libro["id"]
             self.titulo_entry.delete(0, END)
-            self.titulo_entry.insert(1, titulo)
+            self.titulo_entry.insert(0, titulo)
+            print(self.titulo_entry.get())
             self.price_entry.delete(0, END)
-            self.price_entry.insert(0, str(libro.get('precio', '')))
+            self.price_entry.insert(0, precio)
+            print(self.price_entry.get())
             self.id_editorial_entry.delete(0, END)
-            self.id_editorial_entry.insert(0, str(libro.get('id_editorial', '')))
+            self.id_editorial_entry.insert(0, id_editorial)
+            
             self.editorial_entry.delete(0, END)
-            self.editorial_entry.insert(0, str(libro.get('editorial', '')))
+            self.editorial_entry.insert(0, editorial)
             self.fecha_entry.delete(0, END)
-            self.fecha_entry.insert(0, libro.get('fecha_publicacion', ''))
+            self.fecha_entry.insert(0, fecha_publicacion)
             self.autores_entry.delete(0, END)
-            self.fecha_entry.insert(0, libro.get('autores', ''))
+            self.autores_entry.insert(0, autores)
         except AttributeError as e:
             print(f"Error al mostrar el formulario: {e}")
-
