@@ -30,7 +30,7 @@ class Libro(BaseModel):
     def mostrar_libro(self, id):
         consulta = """
             SELECT libros.id, libros.titulo, libros.precio, libros.id_editorial, libros.fecha_publicacion,
-            (SELECT GROUP_CONCAT(apellidos, ', ', nombre SEPARATOR '; ') FROM autores WHERE id IN (SELECT id_autor FROM libros_autores WHERE id_libro = %s)) AS autores,
+            (SELECT GROUP_CONCAT(autores.id, ':', apellidos, ', ', nombre SEPARATOR '; ') FROM autores WHERE id IN (SELECT id_autor FROM libros_autores WHERE id_libro = %s)) AS autores,
             (SELECT nombre FROM editoriales WHERE id = libros.id_editorial) AS editorial
             FROM libros
             WHERE libros.id = %s
@@ -51,17 +51,27 @@ class Libro(BaseModel):
         return self.ejecutar_consulta(consulta, (id, id))
 
     def modificar_registro(self, id, nuevos_datos):
-        # Incluye todos los campos necesarios
-        consulta = """
+        """
+        Modifica un registro existente en la tabla 'libros' y actualiza los autores asociados.
+        """
+        consulta_libro = """
             UPDATE libros 
             SET titulo = %s, precio = %s, id_editorial = %s, fecha_publicacion = %s 
             WHERE id = %s
         """
-        valores = (
+        valores_libro = (
             nuevos_datos["titulo"],
             nuevos_datos["precio"],
             nuevos_datos["id_editorial"],
             nuevos_datos["fecha_publicacion"],
             id
         )
-        return self.ejecutar_consulta(consulta, valores)
+        self.ejecutar_consulta(consulta_libro, valores_libro)
+        
+        # Actualizar autores
+        consulta_eliminar_autores = "DELETE FROM libros_autores WHERE id_libro = %s"
+        self.ejecutar_consulta(consulta_eliminar_autores, (id,))
+        
+        consulta_insertar_autores = "INSERT INTO libros_autores (id_libro, id_autor) VALUES (%s, %s)"
+        for autor_id in nuevos_datos["autores"]:
+            self.ejecutar_consulta(consulta_insertar_autores, (id, autor_id))

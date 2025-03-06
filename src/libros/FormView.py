@@ -8,47 +8,56 @@ class FormView(Frame):
         super().__init__(parent)
         self.controller = None
         self.current_id = None
-        self._create_widgets()
-    
-    def set_controller(self, controller):
-        self.controller = controller
+        self.titulo = None
+        self.precio = None
+        self.id_editorial = None
+        self.editorial = None
+        self.fecha_publicacion = None
+        self.autores = None
 
-    def _create_widgets(self):
+        self.create_widgets()
+
+    def create_widgets(self):
         # Campos del formulario
         form_frame = Frame(self)
         form_frame.pack(pady=20, padx=20, fill=X)
         
-        Label(form_frame, text="Nombre:").pack()
-        self.titulo_entry = Entry(form_frame)
+        Label(form_frame, text="Nombre:").pack()                        
+        self.titulo = StringVar()
+        self.titulo_entry = Entry(form_frame, textvariable=self.titulo)
         self.titulo_entry.pack()
         
         Label(form_frame, text="Precio:").pack()
-        self.price_entry = Entry(form_frame)
+        self.precio = StringVar()
+        self.price_entry = Entry(form_frame, textvariable=self.precio)
         self.price_entry.pack()
         
         Label(form_frame, text="Editorial (ID):").pack()
-        self.id_editorial_entry = Entry(form_frame)
+        self.id_editorial = StringVar()
+        self.id_editorial_entry = Entry(form_frame, textvariable=self.id_editorial)
         self.id_editorial_entry.pack()
 
         Label(form_frame, text="Editorial:").pack()
-        self.editorial_entry = Entry(form_frame)
+        self.editorial = StringVar()
+        self.editorial_entry = Entry(form_frame, textvariable=self.editorial, state='readonly')
         self.editorial_entry.pack()
 
         Label(form_frame, text="Fecha Publicación:").pack()
-        self.fecha_entry = Entry(form_frame)
+        self.fecha_publicacion = StringVar()
+        self.fecha_entry = Entry(form_frame, textvariable=self.fecha_publicacion)
         self.fecha_entry.pack()
         
         Label(form_frame, text="Autores (IDs separados por coma):").pack()
-        self.autores_entry = Entry(form_frame)
+        self.autores = StringVar()
+        self.autores_entry = Entry(form_frame, textvariable=self.autores)
         self.autores_entry.pack()
-        
         # Botones
-        btn_frame = Frame(self)
-        btn_frame.pack(pady=10)
+        Button(form_frame, text="Guardar", command=self._save).pack(side=LEFT, padx=5)
+        Button(form_frame, text="Cancelar", command=self._cancel).pack(side=RIGHT, padx=5)
         
-        Button(btn_frame, text="Guardar", command=self._save).pack(side=LEFT, padx=5)
-        Button(btn_frame, text="Cancelar", command=self._cancel).pack(side=RIGHT, padx=5)
-        
+    def set_controller(self, controller):
+        self.controller = controller
+
     def _save(self):
         data = {
             'titulo': self.titulo_entry.get(),  # Cambia 'name' a 'titulo'
@@ -78,6 +87,7 @@ class FormView(Frame):
         
     def _cancel(self):
         if self.controller:
+            self.pack_forget()
             self.controller.show_list_view()
 
     def load_data(self, libro):
@@ -85,27 +95,15 @@ class FormView(Frame):
         try:            # Asegúrate de que 'libro' es un diccionario
             if isinstance(libro, list):
                 libro = libro[0]
-                titulo = libro['titulo']
-                precio = libro['precio']
-                id_editorial = libro['id_editorial']
-                editorial = libro['editorial']
-                fecha_publicacion = libro['fecha_publicacion']
-                autores = libro['autores']
-            self.current_id = libro["id"]
-            self.titulo_entry.delete(0, END)
-            self.titulo_entry.insert(0, titulo)
-            print(self.titulo_entry.get())
-            self.price_entry.delete(0, END)
-            self.price_entry.insert(0, precio)
-            print(self.price_entry.get())
-            self.id_editorial_entry.delete(0, END)
-            self.id_editorial_entry.insert(0, id_editorial)
-            
-            self.editorial_entry.delete(0, END)
-            self.editorial_entry.insert(0, editorial)
-            self.fecha_entry.delete(0, END)
-            self.fecha_entry.insert(0, fecha_publicacion)
-            self.autores_entry.delete(0, END)
-            self.autores_entry.insert(0, autores)
+                self.current_id = libro['id']
+                self.titulo.set(libro['titulo'])
+                self.precio.set(libro['precio'])
+                self.id_editorial.set(libro['id_editorial'])
+                self.editorial.set(libro['editorial'])
+                self.fecha_publicacion.set(libro['fecha_publicacion'])
+                self.autores.set(libro['autores'])
+                self.pack(fill="x", expand=True)
+
         except AttributeError as e:
             print(f"Error al mostrar el formulario: {e}")
+

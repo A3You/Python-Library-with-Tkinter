@@ -29,13 +29,11 @@ class LibrosController:
 
     def show_form_view(self, libro_id):
         try:
-            self.base_view.switch_frame(FormView)
             if libro_id:
                 libro = self.model.mostrar_libro(libro_id['values'][0])
                 print(libro)
                 if libro:
                     self.form_view.load_data(libro)
-                    # self.base_view.switch_frame(FormView(libro[0]))
         except Exception as e:
             print(f"Error al mostrar el formulario: {e}")
             self.show_error("Error de conexión con la base de datos")
