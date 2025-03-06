@@ -24,16 +24,10 @@ class BaseView(Tk):
         menubar.add_cascade(label="Libros", menu=libros_menu)
         
         # Menu autores
-        autores_menu = Menu(menubar, tearoff=0)
-        autores_menu.add_command(label="Listar")
-        autores_menu.add_command(label="Crear")
-        menubar.add_cascade(label="Autores", menu=autores_menu)
+        menubar.add_command(label="Autores", command=lambda: messagebox.showinfo("Autores", "Pendiente de implementar"))
         
         # Menu editoriales
-        editoriales_menu = Menu(menubar, tearoff=0)
-        editoriales_menu.add_command(label="Listar")
-        editoriales_menu.add_command(label="Crear")
-        menubar.add_cascade(label="Editoriales", menu=editoriales_menu)
+        menubar.add_command(label="Editoriales", command=lambda: messagebox.showinfo("Editoriales", "Pendiente de implementar"))
     
 
     def switch_frame(self, frame_class):

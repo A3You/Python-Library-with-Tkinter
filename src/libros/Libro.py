@@ -36,11 +36,28 @@ class Libro(BaseModel):
             WHERE libros.id = %s
         """
         return self.ejecutar_consulta(consulta, (id, id), fetch=True)
+    
+    def autores_libro(self, id_libro):
+        if not isinstance(id_libro, list):
+            consulta = """
+                SELECT id_autor FROM libros_autores WHERE id_libro = %s
+            """
+            valores = (id_libro,)
+        else:
+            consulta = """
+                SELECT id_autor FROM libros_autores WHERE id_libro IN %s
+            """
+            valores = (tuple(id_libro),)
+        return self.ejecutar_consulta(consulta, valores, fetch=True)
 
 
     def listar_autores(self):
         consulta = "SELECT id, apellidos, nombre FROM autores"
         return self.ejecutar_consulta(consulta, fetch=True)
+    
+    def mostrar_autor(self, id):
+        consulta = "SELECT * FROM autores WHERE id = %s"
+        return self.ejecutar_consulta(consulta, (id), fetch=True)
     
     def listar_editoriales(self):
         consulta = "SELECT id, nombre FROM editoriales"

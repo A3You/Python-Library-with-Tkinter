@@ -47,7 +47,7 @@ class FormView(Frame):
         self.fecha_entry = Entry(form_frame, textvariable=self.fecha_publicacion)
         self.fecha_entry.pack()
         
-        Label(form_frame, text="Autores (IDs separados por coma):").pack()
+        Label(form_frame, text="Autores:").pack()
         self.autores = StringVar()
         self.autores_entry = Entry(form_frame, textvariable=self.autores)
         self.autores_entry.pack()
@@ -90,7 +90,7 @@ class FormView(Frame):
             self.pack_forget()
             self.controller.show_list_view()
 
-    def load_data(self, libro):
+    def load_data(self, libro, autores_ids):
         print(f"Creando Formulario {libro[0]['id']}")
         try:            # Asegúrate de que 'libro' es un diccionario
             if isinstance(libro, list):
