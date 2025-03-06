@@ -1,4 +1,4 @@
-from .Libro import Libro
+from app.models.Libro import Libro
 from .LibrosView import LibrosView
 from .FormView import FormView
 from tkinter import messagebox
@@ -8,16 +8,14 @@ class LibrosController:
     def __init__(self, base_view):
         self.base_view = base_view
         self.model = Libro()
-        # Inicializa las vistas y asigna el controlador
-        self.libros_view = LibrosView(self.base_view)
-        self.form_view = FormView(self.base_view)
-        self.libros_view.set_controller(self)
-        self.form_view.set_controller(self)
         self.show_list_view()
 
+    def ocultar(self):
+        self.libros_view.ocultar()
+
     def show_list_view(self):
-        self.base_view.switch_frame(LibrosView)
-        self.base_view.current_frame.set_controller(self)  # Actualiza el controlador
+        self.libros_view = LibrosView(self.base_view)  # Crear vista solo al necesitarla
+        self.libros_view.set_controller(self)
         self.refresh_data()
 
     def refresh_data(self):

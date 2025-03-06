@@ -14,19 +14,32 @@ class Libro(BaseModel):
         return self.ejecutar_consulta(consulta, fetch=True)
     
     def crear_libro(self, titulo, precio, editorial, fecha_publicacion, autores):
-        consulta = """
-            INSERT INTO libros (titulo, precio, id_editorial, fecha_publicacion) 
-            VALUES (%s, %s, %s, %s);
-        """
-        libro_id = self.ejecutar_consulta(consulta, (titulo, precio, editorial, fecha_publicacion))
-        
-        for autor in autores:
-            consulta_autor = """
-            INSERT INTO libros_autores (id_libro, id_autor) 
-            VALUES (%s, %s)
+        conexion = self._get_connection()
+        try:
+            cursor = conexion.cursor()
+            # Insertar libro
+            consulta_libro = """
+                INSERT INTO libros (titulo, precio, id_editorial, fecha_publicacion) 
+                VALUES (%s, %s, %s, %s)
             """
-            self.ejecutar_consulta(consulta_autor, (libro_id, autor))
-    
+            cursor.execute(consulta_libro, (titulo, precio, editorial, fecha_publicacion))
+            libro_id = cursor.lastrowid
+
+            # Insertar autores
+            consulta_autor = "INSERT INTO libros_autores (id_libro, id_autor) VALUES (%s, %s)"
+            for autor in autores:
+                cursor.execute(consulta_autor, (libro_id, autor))
+
+            conexion.commit()  # Commit manual
+            return libro_id
+        except Exception as e:
+            conexion.rollback()
+            print(f"Error: {e}")
+            return None
+        finally:
+            cursor.close()
+            conexion.close()
+        
     def mostrar_libro(self, id):
         consulta = """
             SELECT libros.id, libros.titulo, libros.precio, libros.id_editorial, libros.fecha_publicacion,
@@ -52,7 +65,7 @@ class Libro(BaseModel):
 
 
     def listar_autores(self):
-        consulta = "SELECT id, apellidos, nombre FROM autores"
+        consulta = "SELECT * FROM autores"
         return self.ejecutar_consulta(consulta, fetch=True)
     
     def mostrar_autor(self, id):

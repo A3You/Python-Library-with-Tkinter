@@ -15,10 +15,9 @@ class BaseModel:
             print(f"Error de conexión: {err}")
             return None
 
-    def ejecutar_consulta(self, consulta, valores=None, fetch=False, dictionary=True):
-        conexion = self._get_connection()  # Nueva conexión cada vez
+    def ejecutar_consulta(self, consulta, valores=None, fetch=False, dictionary=True, commit=True):
+        conexion = self._get_connection()
         if not conexion:
-            print("No hay conexión a la base de datos.")
             return None
 
         cursor = conexion.cursor(dictionary=dictionary)
@@ -31,16 +30,18 @@ class BaseModel:
             if fetch:
                 resultado = cursor.fetchall()
             else:
-                conexion.commit()
+                if commit:  # Nuevo parámetro para controlar el commit
+                    conexion.commit()
                 resultado = cursor.lastrowid
 
             return resultado
         except mysql.connector.Error as err:
             print(f"Error en la consulta: {err}")
+            conexion.rollback()  # Rollback en caso de error
             return None
         finally:
             cursor.close()
-            conexion.close()  # Cierra la conexión después de cada uso
+            conexion.close()
 
     def crear_registro(self, datos):
         """

@@ -9,16 +9,15 @@ class LibrosView(Frame):
         self.controller = None
         self.frame_tabla = None
     
+    def ocultar(self):
+        self.pack_forget()
+    
     def set_controller(self, controller):
         """Asigna el controlador a la vista."""
         self.controller = controller
 
     def update_list(self, libros):
-        try:
-            if self.frame_tabla:
-                self.frame_tabla.destroy()
-        except:
-            pass
+
         self.frame_tabla = Frame(self)
         self.frame_tabla.pack(fill="x", expand=True, padx=10, pady=10)
         self.tabla = Treeview(self.frame_tabla, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
