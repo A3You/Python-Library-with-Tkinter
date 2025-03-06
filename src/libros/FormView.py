@@ -52,8 +52,8 @@ class FormView(Frame):
         self.autores_entry = Entry(form_frame, textvariable=self.autores)
         self.autores_entry.pack()
         # Botones
-        Button(form_frame, text="Guardar", command=self._save).pack(side=LEFT, padx=5)
-        Button(form_frame, text="Cancelar", command=self._cancel).pack(side=RIGHT, padx=5)
+        Button(form_frame, text="Guardar", command=self._save).pack()
+        Button(form_frame, text="Cancelar", command=self._cancel).pack()
         
     def set_controller(self, controller):
         self.controller = controller
