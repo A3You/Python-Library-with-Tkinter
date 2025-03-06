@@ -4,8 +4,9 @@ from tkinter.ttk import *
 
 class FormView(Frame):
     # styles()
-    def __init__(self, parent):
+    def __init__(self, parent, item_id=None):
         super().__init__(parent)
+        self.item_id = item_id
         self.controller = None
         self.current_id = None
         self._create_widgets()

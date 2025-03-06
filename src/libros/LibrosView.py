@@ -7,13 +7,21 @@ class LibrosView(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.controller = None
+        self.frame_tabla = None
     
     def set_controller(self, controller):
         """Asigna el controlador a la vista."""
         self.controller = controller
 
     def update_list(self, libros):
-        self.tabla = Treeview(self, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
+        try:
+            if self.frame_tabla:
+                self.frame_tabla.destroy()
+        except:
+            pass
+        self.frame_tabla = Frame(self)
+        self.frame_tabla.pack(fill="x", expand=True, padx=10, pady=10)
+        self.tabla = Treeview(self.frame_tabla, columns=("id", "titulo", "precio", "editorial", "autores"), show="headings")
         self.tabla.column("id", width=5)
         self.tabla.heading("id", text="ID")
         self.tabla.heading("titulo", text="Título")
@@ -26,11 +34,9 @@ class LibrosView(Frame):
         self.pack(fill="x", expand=True)
         
         # Botones (descomentados y corregidos)
-        btn_frame = Frame(self)
-        btn_frame.pack(pady=10)
-        Button(btn_frame, text="Crear Libro", command=self.crear).pack(side="left", padx=5)
-        Button(btn_frame, text="Modificar Libro", command=self._edit_product).pack(side="left", padx=5)
-        Button(btn_frame, text="Eliminar Libro", command=self._delete_product).pack(side="left", padx=5)
+        Button(self.frame_tabla, text="Crear Libro", command=self._crear).pack(side="left", padx=5)
+        Button(self.frame_tabla, text="Modificar Libro", command=self._edit_product).pack(side="left", padx=5)
+        Button(self.frame_tabla, text="Eliminar Libro", command=self._delete_product).pack(side="left", padx=5)
         
         for libro in libros:
             self.tabla.insert("", "end", values=(
@@ -41,7 +47,7 @@ class LibrosView(Frame):
                 libro["autores"]
             ))
     
-    def crear(self):
+    def _crear(self):
         """Maneja la creación de un nuevo libro."""
         self.pack_forget()
         self.controller.crear_libro()
@@ -50,8 +56,9 @@ class LibrosView(Frame):
         """Maneja la edición de un libro existente."""
         selected = self.tabla.selection()
         if selected:
-            item_id = self.tabla.item(selected[0])['values'][0]
+            item_id = self.tabla.item(selected[0])
             if self.controller:
+                self.pack_forget()
                 self.controller.show_form_view(item_id)
         else:
             messagebox.showwarning("Advertencia", "Seleccione un registro")

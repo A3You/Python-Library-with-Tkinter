@@ -27,12 +27,13 @@ class LibrosController:
         else:
             self.show_error("Error al cargar datos")
 
-    def show_form_view(self, libro_id=None):
+    def show_form_view(self, libro_id):
         try:
             self.base_view.switch_frame(FormView)
             if libro_id:
                 libro = self.model.mostrar_libro(libro_id)
                 if libro:
+                    self.base_view.switch_frame(FormView)
                     self.form_view.load_data(libro)
         except Exception as e:
             print(f"Error al mostrar el formulario: {e}")
