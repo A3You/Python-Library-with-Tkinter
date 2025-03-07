@@ -104,37 +104,35 @@ class FormView(Frame):
         }
         if self.controller:
             if self.current_id:
-                self.controller.guardar_libro(  
-                    self.current_id,
-                    data['titulo'],
-                    data['precio'],
-                    data['id_editorial'],  
-                    data['fecha_publicacion'],
-                    data['autores']
+                self.controller.guardar_libro(
+                    current_id=self.current_id,
+                    titulo=data['titulo'],
+                    precio=data['precio'],
+                    editorial=data['id_editorial'],
+                    fecha_publicacion=data['fecha_publicacion'],
+                    autores=data['autores']
                 )
             else:
                 self.controller.guardar_libro(
-                    data['titulo'],
-                    data['precio'],
-                    data['id_editorial'],  
-                    data['fecha_publicacion'],
-                    data['autores']
+                    titulo=data['titulo'],
+                    precio=data['precio'],
+                    editorial=data['id_editorial'],
+                    fecha_publicacion=data['fecha_publicacion'],
+                    autores=data['autores']
                 )
     
     def _cancel(self):
         self.form_frame.destroy()
 
+    # En FormView.py, modificar el método load_data:
     def load_data(self, libro, autores_ids):
         try:
             if isinstance(libro, list):
                 libro = libro[0]
                 self.current_id = libro['id']
                 self.titulo.set(libro['titulo'])
-                self.precio.set(libro['precio'])
-                self.id_editorial.set(libro['id_editorial'])
-                self.editorial.set(libro['editorial'])
-                self.fecha_publicacion.set(libro['fecha_publicacion'])
-                self.autores.set(libro['autores'])
+                self.precio.set(str(libro['precio']))
+                self.fecha_publicacion.set_date(libro['fecha_publicacion'])
                 self.pack(fill="x", expand=True)
 
             if self.controller:

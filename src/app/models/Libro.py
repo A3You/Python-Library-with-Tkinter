@@ -101,12 +101,12 @@ class Libro(BaseModel):
         return self.ejecutar_consulta(consulta, (id, id))
 
     def modificar_registro(self, id, nuevos_datos):
-        """
-        Modifica un registro existente en la tabla 'libros' y actualiza los autores asociados.
-        """
         consulta_libro = """
             UPDATE libros 
-            SET titulo = %s, precio = %s, id_editorial = %s, fecha_publicacion = %s 
+            SET titulo = %s, 
+                precio = %s, 
+                id_editorial = %s, 
+                fecha_publicacion = %s 
             WHERE id = %s
         """
         valores_libro = (
@@ -118,7 +118,6 @@ class Libro(BaseModel):
         )
         self.ejecutar_consulta(consulta_libro, valores_libro)
         
-        # Actualizar autores
         consulta_eliminar_autores = "DELETE FROM libros_autores WHERE id_libro = %s"
         self.ejecutar_consulta(consulta_eliminar_autores, (id,))
         

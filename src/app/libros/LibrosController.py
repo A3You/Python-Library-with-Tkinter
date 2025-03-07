@@ -43,24 +43,42 @@ class LibrosController:
         except Exception as e:
             print(f"Error al mostrar el formulario: {e}")
             self.show_error("Error de conexión con la base de datos")
-        
 
+    def show_form_view(self, libro_id):
+        try:
+            if libro_id:
+                # Crear nueva instancia del formulario
+                self.form_view = FormView(self.libros_view)
+                self.form_view.set_controller(self)
+                self.form_view.create_widgets()  # Generar widgets
+                
+                # Cargar datos después de crear el formulario
+                libro = self.model.mostrar_libro(libro_id['values'][0])
+                autores_id = self.model.autores_libro(libro_id['values'][0])
+                autores_id = [int(a['id_autor']) for a in autores_id]
+                
+                if libro:
+                    self.form_view.load_data(libro, autores_id)
+                    
+        except Exception as e:
+            print(f"Error al mostrar el formulario: {e}")
+            self.show_error("Error de conexión con la base de datos")
+        
     def crear_libro(self):
         self.form_view = FormView(self.libros_view)
         self.form_view.set_controller(self)
         self.form_view.create_widgets()
     
-    def guardar_libro(self, titulo, precio, editorial, fecha_publicacion, autores):
-        if self.form_view.current_id:
-            # Modificar libro existente
-            self.model.modificar_registro(self.form_view.current_id, {
+    def guardar_libro(self, current_id=None, titulo=None, precio=None, editorial=None, fecha_publicacion=None, autores=None):
+        if current_id:  
+            self.model.modificar_registro(current_id, {
                 "titulo": titulo,
                 "precio": precio,
                 "id_editorial": editorial,
+                "fecha_publicacion": fecha_publicacion,
                 "autores": autores
             })
-        else:
-            # Crear nuevo libro
+        else:  
             self.model.crear_libro(titulo, precio, editorial, fecha_publicacion, autores)
         
         self.form_view.destroy()
@@ -75,6 +93,7 @@ class LibrosController:
     
     def eliminar_libro(self, id):
         self.model.eliminar_registro(id)
+        self.ocultar()
         self.show_list_view()    
     
     def show_error(self, message):
