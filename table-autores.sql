@@ -53,7 +53,7 @@ VALUES
 ('J.K.', 'Rowling', 'Británica', '1965-07-31', NULL),
 ('F. Scott', 'Fitzgerald', 'Estadounidense', '1896-09-24', '1940-12-21'),
 ('Miguel', 'de Cervantes', 'Española', '1547-09-29', '1616-04-23'),
-('Leo', 'Tolstoy', 'Rusa', '1828-09-09', '1910-11-20');
+('Leon', 'Tolstoy', 'Rusa', '1828-09-09', '1910-11-20');
 
 -- Inserción de datos en la tabla editoriales
 INSERT INTO editoriales (nombre, ciudad, pais, fundacion, website)

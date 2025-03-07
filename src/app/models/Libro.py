@@ -15,9 +15,28 @@ class Libro(BaseModel):
     
     def crear_libro(self, titulo, precio, editorial, fecha_publicacion, autores):
         conexion = self._get_connection()
+        if not conexion:
+            raise ConnectionError("Error de conexión a la base de datos")
+        
         try:
             cursor = conexion.cursor()
-            # Insertar libro
+            
+            
+            cursor.execute("SELECT id FROM editoriales WHERE id = %s", (editorial,))
+            if not cursor.fetchone():
+                raise ValueError(f"Editorial ID {editorial} no existe")
+
+           
+            if autores:
+                placeholders = ','.join(['%s'] * len(autores))
+                cursor.execute(f"SELECT id FROM autores WHERE id IN ({placeholders})", tuple(autores))
+                autores_validos = {row[0] for row in cursor.fetchall()}
+                
+                if len(autores_validos) != len(autores):
+                    invalidos = set(autores) - autores_validos
+                    raise ValueError(f"Autores no válidos: {invalidos}")
+
+           
             consulta_libro = """
                 INSERT INTO libros (titulo, precio, id_editorial, fecha_publicacion) 
                 VALUES (%s, %s, %s, %s)
@@ -25,21 +44,22 @@ class Libro(BaseModel):
             cursor.execute(consulta_libro, (titulo, precio, editorial, fecha_publicacion))
             libro_id = cursor.lastrowid
 
-            # Insertar autores
-            consulta_autor = "INSERT INTO libros_autores (id_libro, id_autor) VALUES (%s, %s)"
-            for autor in autores:
-                cursor.execute(consulta_autor, (libro_id, autor))
+            if autores:
+                cursor.executemany(
+                    "INSERT INTO libros_autores (id_libro, id_autor) VALUES (%s, %s)",
+                    [(libro_id, autor_id) for autor_id in autores]
+                )
 
-            conexion.commit()  # Commit manual
+            conexion.commit()
             return libro_id
+
         except Exception as e:
             conexion.rollback()
             print(f"Error: {e}")
-            return None
+            raise  
         finally:
             cursor.close()
             conexion.close()
-        
     def mostrar_libro(self, id):
         consulta = """
             SELECT libros.id, libros.titulo, libros.precio, libros.id_editorial, libros.fecha_publicacion,

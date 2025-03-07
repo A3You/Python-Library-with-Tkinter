@@ -50,12 +50,10 @@ class LibrosView(Frame):
         self.controller.crear_libro()
 
     def _edit_product(self):
-        """Maneja la edición de un libro existente."""
         selected = self.tabla.selection()
         if selected:
             item_id = self.tabla.item(selected[0])
             if self.controller:
-                self.pack_forget()
                 self.controller.show_form_view(item_id)
         else:
             messagebox.showwarning("Advertencia", "Seleccione un registro")
