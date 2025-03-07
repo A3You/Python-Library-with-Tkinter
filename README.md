@@ -18,13 +18,19 @@ CREATE TABLE IF NOT EXISTS usuarios
 
 ### Tablas y Relaciones:
 
-![alt text](image.png)
+![alt text](./assets/images/image.png)
 
 ## 🗔 Vistas Propuestas
 
-### Vista de Libros:
+### Vistas de Libros:
 
-![alt text](vista_libros.png)
+![vista de libros](./assets/images/vista_libros.png)
+![crear libro](./assets/images/crear_libro.png)
+
+### Vistas de Autores:
+
+![alt text](./assets/images/vista_autores.png)
+![alt text](./assets/images/crear_autor.png)
 
 
 
@@ -86,18 +92,33 @@ CREATE TABLE IF NOT EXISTS usuarios
 - Validación de datos en tiempo real
 
 
-## 🗂️ Estructura del Proyecto
+## 🗂️ Estructura del Proyecto  y Clases 
+```
+Un archivo representa una Clase del mismo nombre para organizar y facilitar el trabajo
+de importación. El archivo Base View Maneja los controladores y los muestra en la ventana.
+Aunque son muchos archivos modulariza la aplicación y permite un código mas organizado y legible mienstras permite la escalabilidad.
+```
 ```
 📦 PyLib
 ├── 📂 config
 │   ├── config.ini
 │   └── database.py       # Configuración de conexión a DB
-├── 📂 libros
-│   ├── BaseModel.py
-│   ├── LibrosView.py
-│   ├── FormView.py
-│   ├── LibrosController.py 
-│   └── Libro.py
+├── 📂 app
+│   ├── 📂 autores
+│   │   ├── AutoresView.py
+│   │   ├── FormView.py
+│   │   └── AutoresController.py
+│   ├── 📂 libros
+│   │   ├── LibrosView.py
+│   │   ├── FormView.py
+│   │   └── LibrosController.py
+│   ├── 📂 editoriales
+│   │   ├── EditorialesView.py
+│   │   ├── FormView.py
+│   │   └── EditorialesController.py 
+│   └── 📂 models
+│   │   ├── BaseModel.py
+│   │   └── Libro.py 
 ├── BaseView.py             # Vista Base encargada de Transición entre Frames
 └── main.py               # Punto de entrada
 ```
