@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS usuarios
 ### Vistas de Libros:
 
 ![vista de libros](./assets/images/vista_libros.png)
-![crear libro](./assets/images/crear_libro.png)
+![crear libro](./assets/images/crear_libro.png){:width="100" height="100"}
 
 ### Vistas de Autores:
 
 ![alt text](./assets/images/vista_autores.png)
-![alt text](./assets/images/crear_autor.png)
+![alt text](./assets/images/crear_autor.png){:width="100" height="100"}
 
 
 
