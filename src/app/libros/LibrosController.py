@@ -64,6 +64,9 @@ class LibrosController:
         # Vuelve a la vista de lista
         self.show_list_view()
     
+    def obtener_autores(self):
+        return self.model.listar_autores()
+    
     def eliminar_libro(self, id):
         self.model.eliminar_registro(id)
         self.show_list_view()

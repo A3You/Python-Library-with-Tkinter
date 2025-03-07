@@ -89,10 +89,9 @@ class FormView(Frame):
                     data['fecha_fallecimiento']
                 )
         
+
     def _cancel(self):
-        if self.controller:
-            self.pack_forget()
-            self.controller.show_list_view()
+        self.form_frame.destroy()
 
     def load_data(self, autor, autores_ids):
         print(f"Creando Formulario {autor[0]['id']}")

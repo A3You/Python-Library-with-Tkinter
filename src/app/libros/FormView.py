@@ -56,10 +56,27 @@ class FormView(Frame):
         self.fecha_entry = Entry(self.form_frame, textvariable=self.fecha_publicacion)
         self.fecha_entry.pack(pady=self.form_frame.padding)
         
-        Label(self.form_frame, text="Autores:").pack(pady=self.form_frame.padding)
-        self.autores = StringVar()
-        self.autores_entry = Entry(self.form_frame, textvariable=self.autores)
-        self.autores_entry.pack(pady=self.form_frame.padding)
+        Label(self.form_frame, text="Asignar Autores:").pack(pady=self.form_frame.padding)
+        autores_frame = Frame(self.form_frame)
+        autores_frame.pack(pady=self.form_frame.padding)
+        
+        scrollbar = Scrollbar(autores_frame, orient=VERTICAL)
+        self.autores_listbox = Listbox(
+            autores_frame, 
+            selectmode=MULTIPLE, 
+            yscrollcommand=scrollbar.set,
+            height=5
+        )
+        scrollbar.config(command=self.autores_listbox.yview)
+        
+        self.autores_listbox.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        
+        # Cargar autores desde el controlador
+        if self.controller:
+            autores = self.controller.obtener_autores()
+            for autor in autores:
+                self.autores_listbox.insert(END, f"{autor['apellidos']}, {autor['nombre']} (ID: {autor['id']})")
         # Botones
         Button(self.form_frame, text="Guardar", command=self._save).pack(pady=self.form_frame.padding)
         Button(self.form_frame, text="Cancelar", command=self._cancel).pack(pady=self.form_frame.padding)
@@ -69,12 +86,18 @@ class FormView(Frame):
 
 
     def _save(self):
+        selected_indices = self.autores_listbox.curselection()
+        autores_ids = []
+        if self.controller:
+            all_autores = self.controller.obtener_autores()
+            for idx in selected_indices:
+                if idx < len(all_autores):
+                    autores_ids.append(all_autores[idx]['id'])
         data = {
             'titulo': self.titulo_entry.get(),
             'precio': self.price_entry.get(),
             'id_editorial': self.id_editorial.get(),  # <- Cambiado aquí
-            'fecha_publicacion': self.fecha_entry.get(),
-            'autores': [int(a) for a in self.autores_entry.get().split(',')]
+            'fecha_publicacion': self.fecha_entry.get()
         }
         if self.controller:
             if self.current_id:
@@ -84,7 +107,7 @@ class FormView(Frame):
                     data['precio'],
                     data['id_editorial'],  # <- Asegurar que se envía el ID
                     data['fecha_publicacion'],
-                    data['autores']
+                    data['autores': autores_ids]
                 )
             else:
                 self.controller.guardar_libro(
@@ -92,16 +115,13 @@ class FormView(Frame):
                     data['precio'],
                     data['id_editorial'],  # <- Aquí también
                     data['fecha_publicacion'],
-                    data['autores']
+                    data['autores': autores_ids]
                 )
     def _cancel(self):
-        if self.controller:
-            self.pack_forget()
-            self.controller.show_list_view()
+        self.form_frame.destroy()
 
     def load_data(self, libro, autores_ids):
-        print(f"Creando Formulario {libro[0]['id']}")
-        try:            # Asegúrate de que 'libro' es un diccionario
+        try:
             if isinstance(libro, list):
                 libro = libro[0]
                 self.current_id = libro['id']
@@ -112,6 +132,12 @@ class FormView(Frame):
                 self.fecha_publicacion.set(libro['fecha_publicacion'])
                 self.autores.set(libro['autores'])
                 self.pack(fill="x", expand=True)
+
+            if self.controller:
+                    all_autores = self.controller.obtener_autores()
+                    for idx, autor in enumerate(all_autores):
+                        if autor['id'] in autores_ids:
+                            self.autores_listbox.selection_set(idx)
 
         except AttributeError as e:
             print(f"Error al mostrar el formulario: {e}")

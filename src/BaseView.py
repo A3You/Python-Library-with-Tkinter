@@ -17,8 +17,11 @@ class BaseView(Tk):
         menubar = Menu(self)
         self.config(menu=menubar)
 
+        
+        self.welcome_label = Label(self, text="Bienvenido a la aplicación de gestión de libros", font=("Century Gothic", 32), wraplength=500, justify=CENTER)
+        self.welcome_label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Menu editoriales
+        # Menu options
         menubar.add_command(label="Libros", command=self._set_libros_controller)
         menubar.add_command(label="Autores", command=self._set_autores_controller)
         # menubar.add_command(label="Editoriales", command=self._set_editoriales_controller)
@@ -29,6 +32,8 @@ class BaseView(Tk):
             self.destroy()
 
     def _set_autores_controller(self):
+        if self.welcome_label:
+            self.welcome_label.pack_forget()
         if self.libros_controller:
             self.libros_controller.ocultar()
         if self.autores_controller:
@@ -38,6 +43,8 @@ class BaseView(Tk):
         self.autores_controller = AutoresController(self)
 
     def _set_libros_controller(self):
+        if self.welcome_label:
+            self.welcome_label.pack_forget()
         if self.libros_controller:
             self.libros_controller.ocultar()
         if self.autores_controller:
@@ -46,5 +53,4 @@ class BaseView(Tk):
     
     # def _set_editoriales_controller(self):
     #     self.editoriales_controller = EditorialesController(self)
-    
 
