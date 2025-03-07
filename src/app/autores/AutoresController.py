@@ -7,6 +7,8 @@ from tkinter import messagebox
 class AutoresController:
     def __init__(self, base_view):
         self.base_view = base_view
+        self.form_view = None
+        self.autores_view = AutoresView(self.base_view)
         self.model = Libro()
         self.show_list_view()
     
@@ -25,44 +27,43 @@ class AutoresController:
         else:
             self.show_error("Error al cargar datos")
 
-    def show_form_view(self, libro_id):
+    def show_form_view(self, autor_id):
         try:
-            if libro_id:
-                libro = self.model.mostrar_libro(libro_id['values'][0])
-                print(libro)
-                autores_id = self.model.autores_libro(libro_id['values'][0])
-                autores_id = [int(a['id_autor']) for a in autores_id]
-                print(autores_id)
-                if libro:
-                    self.form_view.load_data(libro, autores_id)
+            if autor_id:
+                autor = self.model.mostrar_autor(autor_id['values'][0])
+                print(autor)
+                if autor:
+                    self.form_view.load_data(autor)
         except Exception as e:
             print(f"Error al mostrar el formulario: {e}")
             self.show_error("Error de conexión con la base de datos")
         
 
-    def crear_libro(self):
-        """Prepara el formulario para crear un nuevo libro."""
-        self.form_view.current_id = None
-        self.base_view.switch_frame(FormView)
+    def crear_autor(self):
+        self.form_view = FormView(self.autores_view)
+        self.form_view.set_controller(self)
+        self.form_view.create_widgets()
+        
     
-    def guardar_libro(self, titulo, precio, editorial, fecha_publicacion, autores):
+    def guardar_autor(self, nombre, apellido, fecha_nacimiento, nacionalidad, fecha_fallecimiento):
         """Guarda un libro (crear o modificar)."""
         if self.form_view.current_id:
             # Modificar libro existente
             self.model.modificar_registro(self.form_view.current_id, {
-                "titulo": titulo,
-                "precio": precio,
-                "id_editorial": editorial,
-                "autores": autores
+                "nombre": nombre,
+                "apellido": apellido,
+                "nacionalidad": nacionalidad,
+                "fecha_nacimiento": fecha_nacimiento,
+                "fecha_fallecimiento": fecha_fallecimiento,
             })
         else:
             # Crear nuevo libro
-            self.model.crear_libro(titulo, precio, editorial, fecha_publicacion, autores)
+            self.model.crear_autor(nombre, apellido, fecha_nacimiento, nacionalidad, fecha_nacimiento, fecha_fallecimiento)
         
         # Vuelve a la vista de lista
         self.show_list_view()
     
-    def eliminar_libro(self, id):
+    def eliminar_autor(self, id):
         self.model.eliminar_registro(id)
         self.show_list_view()
     
@@ -70,3 +71,4 @@ class AutoresController:
     def show_error(self, message):
         """Muestra un mensaje de error."""
         messagebox.showerror("Error", message)
+

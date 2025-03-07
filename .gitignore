@@ -1,5 +1,6 @@
 *.env
 *.ini
+*.log
 test.*
 venv/
 .vscode/

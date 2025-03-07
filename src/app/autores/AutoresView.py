@@ -17,11 +17,6 @@ class AutoresView(Frame):
         self.controller = controller
 
     def update_list(self, autores):
-        try:
-            if self.frame_tabla:
-                self.frame_tabla.destroy()
-        except:
-            pass
         self.frame_tabla = Frame(self)
         self.frame_tabla.pack(fill="x", expand=True, padx=10, pady=10)
         self.tabla = Treeview(self.frame_tabla, columns=("id", "nombre", "apellidos", "nacionalidad", "fecha_nacimiento"), show="headings")
@@ -54,15 +49,13 @@ class AutoresView(Frame):
             ))
     
     def _crear(self):
-        """Maneja la creación de un nuevo libro."""
-        self.pack_forget()
-        self.controller.crear_libro()
+        self.controller.crear_autor()
 
     def _edit_product(self):
         """Maneja la edición de un libro existente."""
         selected = self.tabla.selection()
         if selected:
-            item_id = self.tabla.item(selected[0])
+            item_id = self.tabla.item(selected[0])['values'][0]
             if self.controller:
                 self.pack_forget()
                 self.controller.show_form_view(item_id)
@@ -75,7 +68,7 @@ class AutoresView(Frame):
         if selected:
             item_id = self.tabla.item(selected[0])['values'][0]
             if self.controller:
-                self.controller.eliminar_libro(item_id)
+                self.controller.eliminar_autor(item_id)
         else:
             messagebox.showwarning("Advertencia", "Seleccione un registro")
 

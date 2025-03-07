@@ -46,4 +46,5 @@ class BaseView(Tk):
     
     # def _set_editoriales_controller(self):
     #     self.editoriales_controller = EditorialesController(self)
+    
 

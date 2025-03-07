@@ -7,6 +7,8 @@ from tkinter import messagebox
 class LibrosController:
     def __init__(self, base_view):
         self.base_view = base_view
+        self.form_view = None
+        self.libros_view = LibrosView(self.base_view)
         self.model = Libro()
         self.show_list_view()
 
@@ -41,9 +43,9 @@ class LibrosController:
         
 
     def crear_libro(self):
-        """Prepara el formulario para crear un nuevo libro."""
-        self.form_view.current_id = None
-        self.base_view.switch_frame(FormView)
+        self.form_view = FormView(self.libros_view)
+        self.form_view.set_controller(self)
+        self.form_view.create_widgets()
     
     def guardar_libro(self, titulo, precio, editorial, fecha_publicacion, autores):
         """Guarda un libro (crear o modificar)."""

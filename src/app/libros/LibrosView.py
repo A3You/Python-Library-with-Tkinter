@@ -47,8 +47,6 @@ class LibrosView(Frame):
             ))
     
     def _crear(self):
-        """Maneja la creación de un nuevo libro."""
-        self.pack_forget()
         self.controller.crear_libro()
 
     def _edit_product(self):

@@ -15,45 +15,54 @@ class FormView(Frame):
         self.fecha_publicacion = None
         self.autores = None
 
-        self.create_widgets()
-
     def create_widgets(self):
         # Campos del formulario
-        form_frame = Frame(self)
-        form_frame.pack(pady=20, padx=20, fill=X)
+        self.form_frame = Toplevel(self)
+        self.form_frame.transient(self)
         
-        Label(form_frame, text="Nombre:").pack()                        
+        # Centrar en la pantalla
+        screen_width = self.form_frame.winfo_screenwidth()
+        screen_height = self.form_frame.winfo_screenheight()
+        width = 400
+        height = 420
+        x = (screen_width/2) - (width/2)
+        y = (screen_height/2) - (height/2)
+        self.form_frame.geometry('%dx%d+%d+%d' % (width, height, x, y))
+        
+        self.form_frame.padding = 3
+        
+        Label(self.form_frame, text="Nombre:").pack(pady=self.form_frame.padding)                        
         self.titulo = StringVar()
-        self.titulo_entry = Entry(form_frame, textvariable=self.titulo)
-        self.titulo_entry.pack()
+        self.titulo_entry = Entry(self.form_frame, textvariable=self.titulo)
+        self.titulo_entry.pack(pady=self.form_frame.padding)
         
-        Label(form_frame, text="Precio:").pack()
+        Label(self.form_frame, text="Precio:").pack(pady=self.form_frame.padding)
         self.precio = StringVar()
-        self.price_entry = Entry(form_frame, textvariable=self.precio)
-        self.price_entry.pack()
+        self.price_entry = Entry(self.form_frame, textvariable=self.precio)
+        self.price_entry.pack(pady=self.form_frame.padding)
         
-        Label(form_frame, text="Editorial (ID):").pack()
+        Label(self.form_frame, text="Editorial (ID):").pack(pady=self.form_frame.padding)
         self.id_editorial = StringVar()
-        self.id_editorial_entry = Entry(form_frame, textvariable=self.id_editorial)
-        self.id_editorial_entry.pack()
+        self.id_editorial_entry = Entry(self.form_frame, textvariable=self.id_editorial)
+        self.id_editorial_entry.pack(pady=self.form_frame.padding)
 
-        Label(form_frame, text="Editorial:").pack()
+        Label(self.form_frame, text="Editorial:").pack(pady=self.form_frame.padding)
         self.editorial = StringVar()
-        self.editorial_entry = Entry(form_frame, textvariable=self.editorial, state='readonly')
-        self.editorial_entry.pack()
+        self.editorial_entry = Entry(self.form_frame, textvariable=self.editorial, state='readonly')
+        self.editorial_entry.pack(pady=self.form_frame.padding)
 
-        Label(form_frame, text="Fecha Publicación:").pack()
+        Label(self.form_frame, text="Fecha Publicación:").pack(pady=self.form_frame.padding)
         self.fecha_publicacion = StringVar()
-        self.fecha_entry = Entry(form_frame, textvariable=self.fecha_publicacion)
-        self.fecha_entry.pack()
+        self.fecha_entry = Entry(self.form_frame, textvariable=self.fecha_publicacion)
+        self.fecha_entry.pack(pady=self.form_frame.padding)
         
-        Label(form_frame, text="Autores:").pack()
+        Label(self.form_frame, text="Autores:").pack(pady=self.form_frame.padding)
         self.autores = StringVar()
-        self.autores_entry = Entry(form_frame, textvariable=self.autores)
-        self.autores_entry.pack()
+        self.autores_entry = Entry(self.form_frame, textvariable=self.autores)
+        self.autores_entry.pack(pady=self.form_frame.padding)
         # Botones
-        Button(form_frame, text="Guardar", command=self._save).pack()
-        Button(form_frame, text="Cancelar", command=self._cancel).pack()
+        Button(self.form_frame, text="Guardar", command=self._save).pack(pady=self.form_frame.padding)
+        Button(self.form_frame, text="Cancelar", command=self._cancel).pack(pady=self.form_frame.padding)
         
     def set_controller(self, controller):
         self.controller = controller
