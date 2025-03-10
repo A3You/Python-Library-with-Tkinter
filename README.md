@@ -153,5 +153,3 @@ CREATE TABLE IF NOT EXISTS libros_autores (
   - Consultas específicas
 - El modelo `Libro.py` gestiona múltiples tablas por requerimientos del CRUD
 - La configuración se centraliza en `ConfigManager`
-
-``` 
