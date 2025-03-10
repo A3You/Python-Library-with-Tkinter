@@ -1,3 +1,5 @@
+Claro, aquí tienes el README corregido y mejorado, manteniendo las imágenes que ya estaban incluidas:
+
 ```markdown
 # PyLib - Sistema de Gestión Bibliotecaria 📚
 
@@ -37,6 +39,24 @@ CREATE TABLE IF NOT EXISTS libros_autores (
 );
 ```
 
+## 📚 Diagrama de Relaciones de la Base de Datos
+
+### Tablas y Relaciones:
+
+![alt text](./assets/images/image.png)
+
+## 🗔 Vistas Propuestas
+
+### Vistas de Libros:
+
+![vista de libros](./assets/images/vista_libros.png)
+<img src="./assets/images/crear_libro.png" alt="crear libro" height="300" width="300">
+
+### Vistas de Autores:
+
+![alt text](./assets/images/vista_autores.png)
+<img src="./assets/images/crear_autor.png" alt="crear libro" height="300" width="300">
+
 ## 🐍 Arquitectura MVC - Flujo y Componentes
 
 ### **Modelos** (`/models`)
@@ -62,7 +82,7 @@ CREATE TABLE IF NOT EXISTS libros_autores (
   - Lógica similar para autores
   - Integración con selector de libros
 
-## 🛠️ Instalación
+## 🛠️ Instalación Mejorada
 1. Requisitos:
    ```bash
    pip install mysql-connector-python tkcalendar
@@ -84,7 +104,7 @@ CREATE TABLE IF NOT EXISTS libros_autores (
    python main.py
    ```
 
-## 🗂️ Estructura del Proyecto
+## 🗂️ Estructura Actualizada del Proyecto
 ```
 📦 PyLib
 ├── 📂 config
@@ -106,7 +126,7 @@ CREATE TABLE IF NOT EXISTS libros_autores (
 └── main.py                   # Punto de entrada
 ```
 
-## 🔄 Flujo MVC
+## 🔄 Flujo MVC Detallado
 1. **Interacción Usuario**:
    - Ej: Click en "Crear Libro"
    - La Vista (`LibrosView`) notifica al Controlador
