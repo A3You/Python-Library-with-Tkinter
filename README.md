@@ -1,131 +1,157 @@
 ```markdown
 # PyLib - Sistema de Gestión Bibliotecaria 📚
-```
 
-Aplicación para administrar libros, autores y 
-editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
+Aplicación para administrar libros, autores y editoriales con interfaz gráfica (Tkinter) y arquitectura MVC.
 
 ## 🗃️ Estructura de la Base de Datos
-```sql - MariaDb
-CREATE TABLE IF NOT EXISTS autores
-CREATE TABLE IF NOT EXISTS editoriales
-CREATE TABLE IF NOT EXISTS libros
-CREATE TABLE IF NOT EXISTS libros_autores
-CREATE TABLE IF NOT EXISTS roles
-CREATE TABLE IF NOT EXISTS usuarios
+```sql
+-- Estructura principal (ejemplo)
+CREATE TABLE IF NOT EXISTS autores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    apellidos VARCHAR(100),
+    nacionalidad VARCHAR(50),
+    fecha_nacimiento DATE
+);
+
+CREATE TABLE IF NOT EXISTS editoriales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS libros (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255),
+    precio DECIMAL(10,2),
+    id_editorial INT,
+    fecha_publicacion DATE,
+    FOREIGN KEY (id_editorial) REFERENCES editoriales(id)
+);
+
+CREATE TABLE IF NOT EXISTS libros_autores (
+    id_libro INT,
+    id_autor INT,
+    PRIMARY KEY (id_libro, id_autor),
+    FOREIGN KEY (id_libro) REFERENCES libros(id),
+    FOREIGN KEY (id_autor) REFERENCES autores(id)
+);
 ```
-## 📚 Diagrama de Relaciones de la Base de Datos
 
-### Tablas y Relaciones:
+## 🐍 Arquitectura MVC - Flujo y Componentes
 
-![alt text](./assets/images/image.png)
+### **Modelos** (`/models`)
+- `BaseModel.py`: Clase base con métodos CRUD genéricos y manejo de conexiones
+- `Libro.py`: Hereda de BaseModel. Maneja:
+  - Operaciones con libros y sus relaciones N-M con autores
+  - Validaciones de editoriales y autores
+  - Consultas complejas con JOINs y subconsultas
 
-## 🗔 Vistas Propuestas
+### **Vistas** (`/libros`, `/autores`)
+- `*View.py`: Componentes Tkinter para mostrar listados y formularios
+- `FormView.py`: Formulario reutilizable con:
+  - DateEntry para fechas
+  - Combobox para relaciones
+  - Listbox multiselección
 
-### Vistas de Libros:
-
-![vista de libros](./assets/images/vista_libros.png)
-<img src="./assets/images/crear_libro.png" alt="crear libro" height="300" width="300">
-
-### Vistas de Autores:
-
-![alt text](./assets/images/vista_autores.png)
-<img src="./assets/images/crear_autor.png" alt="crear libro" height="300" width="300">
-
-
-
-### 🐍 Arquitectura MVC
-
-
-**Planificación de Interfaces:**
-0. **Formulario de Auth**
-   - Formulario de inicio de sesión
-   - Formulario de registro
-
-1. **Ventana Principal**
-   - Menú con acceso a los módulos
-   - Listado dinámico de registros
-
-2. **Formulario Libros**
-   - Campos: Título, Fecha, Precio, Selector Editorial
-   - Botones: Guardar/Editar, Eliminar, Limpiar
-   - Tabla con libros existentes
-
-3. **Formulario Autores**
-   - Campos: Nombre, Apellidos, Nacionalidad, Fechas
-   - Validación de datos obligatorios
-
-4. **Gestión Relaciones**
-   - Selector de libro + Listado de autores
-   - Checkboxes para asignar/desasignar autores
-
-### **Controladores**
-```python
-# controladores/
-├── libro_controller.py   # Media entre LibroModel y libros_view
-└── autor_controller.py   # Gestiona lógica de autores
-```
+### **Controladores** (`/controllers`)
+- `LibrosController.py`: 
+  - Coordina vistas de libros con el modelo
+  - Gestiona eventos y transformación de datos
+  - Maneja actualización de listados
+- `AutoresController.py`:
+  - Lógica similar para autores
+  - Integración con selector de libros
 
 ## 🛠️ Instalación
-1. Clonar repositorio
-2. Instalar dependencias:
+1. Requisitos:
    ```bash
-   pip install mysql-connector-python tkinter
+   pip install mysql-connector-python tkcalendar
    ```
-3. Entra a la carpeta principal y ejecuta docker-compose up -d --build
-   Es necesario para levantar la base de datos y phpmyadmin como cliente para insertar
-   consultas sql.
 
-4. La consulta SQL esta en este archivo ➡️ [tabla sql](table-autores.sql) 
+2. Configuración DB:
+   - Crear archivo `config/config.ini` con:
+     ```ini
+     [database]
+     host = localhost
+     user = root
+     password = 
+     database = biblioteca
+     use_pure = True
+     ```
 
-5. Crea tu config.env basandote en el ejemplo y sustituye
-   tus datos por los necesarios a la conexión:
-
-6. Ejecutar aplicación principal:
-   ```python
+3. Iniciar aplicación:
+   ```bash
    python main.py
    ```
 
-## 📋 Funcionalidades Clave
-- CRUD completo para cada entidad
-- Relaciones muchos-a-muchos visuales
-- Validación de datos en tiempo real
-
-
-## 🗂️ Estructura del Proyecto  y Clases 
-```
-Un archivo representa una Clase del mismo nombre para organizar y facilitar el trabajo
-de importación. El archivo Base View Maneja los controladores y los muestra en la ventana.
-Aunque son muchos archivos modulariza la aplicación y permite un código mas organizado y legible mienstras permite la escalabilidad.
-```
+## 🗂️ Estructura del Proyecto
 ```
 📦 PyLib
 ├── 📂 config
-│   ├── config.ini
-│   └── database.py       # Configuración de conexión a DB
+│   ├── config.ini            # Configuración de conexión
+│   └── config_manager.py     # Gestor de configuración
 ├── 📂 app
 │   ├── 📂 autores
-│   │   ├── AutoresView.py
-│   │   ├── FormView.py
-│   │   └── AutoresController.py
+│   │   ├── AutoresView.py    # Vista listado autores
+│   │   ├── FormView.py       # Formulario específico autores
+│   │   └── AutoresController.py # Lógica autores
 │   ├── 📂 libros
-│   │   ├── LibrosView.py
-│   │   ├── FormView.py
-│   │   └── LibrosController.py
-│   ├── 📂 editoriales
-│   │   ├── EditorialesView.py
-│   │   ├── FormView.py
-│   │   └── EditorialesController.py 
+│   │   ├── LibrosView.py     # Vista listado libros
+│   │   ├── FormView.py       # Formulario específico libros
+│   │   └── LibrosController.py # Lógica libros
 │   └── 📂 models
-│   │   ├── BaseModel.py
-│   │   └── Libro.py 
-├── BaseView.py             # Vista Base encargada de Transición entre Frames
-└── main.py               # Punto de entrada
+│       ├── BaseModel.py      # Clase abstracta para modelos
+│       └── Libro.py         # Modelo específico libros
+├── BaseView.py               # Vista principal contenedora
+└── main.py                   # Punto de entrada
 ```
 
 ## 🔄 Flujo MVC
-1. **Usuario** interactúa con la vista (ej: formulario de libro)  
-2. **Controlador** recibe la acción y valida datos  
-3. **Modelo** ejecuta operaciones en la base de datos  
-4. **Vista** actualiza la interfaz con los cambios
+1. **Interacción Usuario**:
+   - Ej: Click en "Crear Libro"
+   - La Vista (`LibrosView`) notifica al Controlador
 
+2. **Controlador** (`LibrosController`):
+   - Valida permisos
+   - Instancia el FormView con los datos necesarios
+   - Recoge los datos del formulario
+
+3. **Modelo** (`Libro.py`):
+   - Ejecuta consultas SQL
+   - Maneja transacciones
+   - Aplica reglas de negocio:
+     ```python
+     def crear_libro(...):
+         # 1. Valida existencia editorial
+         # 2. Verifica autores válidos
+         # 3. Inserta en transacción
+     ```
+
+4. **Actualización Vista**:
+   - El Controlador solicita nuevo listado
+   - La Vista renderiza los datos actualizados
+
+## ✅ Mejoras Implementadas
+1. **Relaciones N-M**:
+   - Selector gráfico de autores para libros
+   - Actualización en cascada de relaciones
+
+2. **Validaciones**:
+   - Campos obligatorios en formularios
+   - Formato de fechas
+   - Existencia de registros relacionados
+
+3. **Patrones**:
+   - Conexiones DB por operación
+   - Reutilización de componentes UI
+   - Separación clara MVC
+
+## 📌 Notas Importantes
+- Cada módulo (libros/autores) tiene su propio:
+  - FormView especializado
+  - Controlador dedicado
+  - Consultas específicas
+- El modelo `Libro.py` gestiona múltiples tablas por requerimientos del CRUD
+- La configuración se centraliza en `ConfigManager`
+
+``` 

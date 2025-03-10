@@ -21,7 +21,7 @@ class FormView(Frame):
         self.form_frame = Toplevel(self)
         self.form_frame.transient(self)
         
-        # Centrar en la pantalla
+        
         screen_width = self.form_frame.winfo_screenwidth()
         screen_height = self.form_frame.winfo_screenheight()
         width = 400
@@ -88,23 +88,28 @@ class FormView(Frame):
                     data['nacionalidad'],
                     data['fecha_fallecimiento']
                 )
+
+        self.form_frame.destroy()
         
 
     def _cancel(self):
         self.form_frame.destroy()
 
     def load_data(self, autor, autores_ids):
-        print(f"Creando Formulario {autor[0]['id']}")
-        try:            
+        try:
+            # Si es una lista, extraer el primer elemento
             if isinstance(autor, list):
                 autor = autor[0]
-                self.current_id = autor['id']
-                self.nombre.set(autor['nombre'])
-                self.apellido.set(autor['apellido'])
-                self.fecha_nacimiento.set(autor['fecha_nacimiento'])
-                self.nacionalidad.set(autor['nacionalidad'])
-                self.fecha_fallecimiento.set(autor['fecha_fallecimiento'])
-                self.pack(fill="x", expand=True)
+                
+            self.current_id = autor['id']
+            self.nombre.set(autor.get('nombre', ''))
+            self.apellido.set(autor.get('apellidos', ''))  # Cambiar a 'apellidos'
+            self.fecha_nacimiento.set(autor.get('fecha_nacimiento', ''))
+            self.nacionalidad.set(autor.get('nacionalidad', ''))
+            self.fecha_fallecimiento.set(autor.get('fecha_fallecimiento', ''))
+            
+        except (AttributeError, KeyError) as e:
+            print(f"Error al mostrar el formulario: {e}")
 
         except AttributeError as e:
             print(f"Error al mostrar el formulario: {e}")

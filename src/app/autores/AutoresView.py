@@ -52,13 +52,13 @@ class AutoresView(Frame):
         self.controller.crear_autor()
 
     def _edit_product(self):
-        """Maneja la edición de un libro existente."""
         selected = self.tabla.selection()
         if selected:
-            item_id = self.tabla.item(selected[0])['values'][0]
+            item = self.tabla.item(selected[0])
+            autor_id = item['values'][0] 
             if self.controller:
                 self.pack_forget()
-                self.controller.show_form_view(item_id)
+                self.controller.show_form_view(autor_id) 
         else:
             messagebox.showwarning("Advertencia", "Seleccione un registro")
 

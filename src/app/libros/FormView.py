@@ -18,11 +18,11 @@ class FormView(Frame):
         self.autores = None
 
     def create_widgets(self):
-        # Campos del formulario
+        
         self.form_frame = Toplevel(self)
         self.form_frame.transient(self)
         
-        # Centrar en la pantalla
+        
         screen_width = self.form_frame.winfo_screenwidth()
         screen_height = self.form_frame.winfo_screenheight()
         width = 400

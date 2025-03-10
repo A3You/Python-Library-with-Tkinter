@@ -90,7 +90,7 @@ class Libro(BaseModel):
     
     def mostrar_autor(self, id):
         consulta = "SELECT * FROM autores WHERE id = %s"
-        return self.ejecutar_consulta(consulta, (id), fetch=True)
+        return self.ejecutar_consulta(consulta, (id,), fetch=True)
     
     def listar_editoriales(self):
         consulta = "SELECT id, nombre FROM editoriales"

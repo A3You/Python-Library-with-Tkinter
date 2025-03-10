@@ -93,7 +93,7 @@ class LibrosController:
     
     def eliminar_libro(self, id):
         self.model.eliminar_registro(id)
-        self.ocultar()
+        self.ocultar()  
         self.show_list_view()    
     
     def show_error(self, message):
