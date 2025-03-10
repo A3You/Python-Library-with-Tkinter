@@ -57,7 +57,6 @@ class AutoresView(Frame):
             item = self.tabla.item(selected[0])
             autor_id = item['values'][0] 
             if self.controller:
-                self.pack_forget()
                 self.controller.show_form_view(autor_id) 
         else:
             messagebox.showwarning("Advertencia", "Seleccione un registro")

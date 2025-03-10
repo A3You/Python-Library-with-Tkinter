@@ -1,4 +1,4 @@
-from app.models.Libro import Libro
+from app.models.Autores import Autores
 from .AutoresView import AutoresView
 from .FormView import FormView
 from tkinter import messagebox
@@ -9,7 +9,7 @@ class AutoresController:
         self.base_view = base_view
         self.form_view = None
         self.autores_view = AutoresView(self.base_view)
-        self.model = Libro()
+        self.model = Autores()
         self.show_list_view()
     
     def ocultar(self):
@@ -48,22 +48,23 @@ class AutoresController:
         self.form_view.create_widgets()
         
     
-    def guardar_autor(self, nombre, apellido, fecha_nacimiento, nacionalidad, fecha_fallecimiento):
-    
-        if self.form_view.current_id:
-            # Modificar libro existente
-            self.model.modificar_registro(self.form_view.current_id, {
+    def guardar_autor(self, current_id=None, nombre=None, apellidos=None, fecha_nacimiento=None, nacionalidad=None, fecha_fallecimiento=None):
+        """Guarda un autor (crear o modificar)."""
+        if current_id:
+            # Modificar autor existente
+            self.model.modificar_registro(current_id, {
                 "nombre": nombre,
-                "apellido": apellido,
+                "apellidos": apellidos,
                 "nacionalidad": nacionalidad,
                 "fecha_nacimiento": fecha_nacimiento,
                 "fecha_fallecimiento": fecha_fallecimiento,
             })
         else:
-            # Crear nuevo libro
-            self.model.crear_autor(nombre, apellido, fecha_nacimiento, nacionalidad, fecha_nacimiento, fecha_fallecimiento)
+            # Crear nuevo autor
+            self.model.crear_autor(nombre, apellidos, fecha_nacimiento, nacionalidad, fecha_fallecimiento)
         
         # Vuelve a la vista de lista
+        self.ocultar()
         self.show_list_view()
     
     def eliminar_autor(self, id):

@@ -9,7 +9,7 @@ class FormView(Frame):
         self.controller = None
         self.current_id = None
         self.nombre = None
-        self.apellido = None
+        self.apellidos = None
         self.fecha_nacimiento = None
         self.nacionalidad = None
         self.fecha_fallecimiento = None
@@ -37,10 +37,10 @@ class FormView(Frame):
         self.nombre_entry = Entry(self.form_frame, textvariable=self.nombre)
         self.nombre_entry.pack()
         
-        Label(self.form_frame, text="Apellido:").pack(pady=self.form_frame.padding)
-        self.apellido = StringVar()
-        self.apellido_entry = Entry(self.form_frame, textvariable=self.apellido)
-        self.apellido_entry.pack()
+        Label(self.form_frame, text="Apellidos:").pack(pady=self.form_frame.padding)
+        self.apellidos = StringVar()
+        self.apellidos_entry = Entry(self.form_frame, textvariable=self.apellidos)
+        self.apellidos_entry.pack()
         
 
         Label(self.form_frame, text="Nacionalidad:").pack(pady=self.form_frame.padding)
@@ -65,7 +65,7 @@ class FormView(Frame):
     def _save(self):
         data = {
             'nombre': self.nombre_entry.get(),
-            'apellido': self.apellido_entry.get(),
+            'apellidos': self.apellidos_entry.get(),
             'fecha_nacimiento': self.fecha_nacimiento_entry.get(),
             'nacionalidad': self.nacionalidad_entry.get(),
             'fecha_fallecimiento': self.fecha_fallecimiento_entry.get()
@@ -73,24 +73,24 @@ class FormView(Frame):
         if self.controller:
             if self.current_id:
                 self.controller.guardar_autor(
-                    self.current_id,
-                    data['nombre'],
-                    data['apellido'],
-                    data['fecha_nacimiento'],
-                    data['nacionalidad'],
-                    data['fecha_fallecimiento']
+                    current_id=self.current_id,
+                    nombre=data['nombre'],
+                    apellidos=data['apellidos'],
+                    fecha_nacimiento=data['fecha_nacimiento'],
+                    nacionalidad=data['nacionalidad'],
+                    fecha_fallecimiento=data['fecha_fallecimiento']
                 )
             else:
                 self.controller.guardar_autor(
-                    data['nombre'],
-                    data['apellido'],
-                    data['fecha_nacimiento'],
-                    data['nacionalidad'],
-                    data['fecha_fallecimiento']
+                    nombre=data['nombre'],
+                    apellidos=data['apellidos'],
+                    fecha_nacimiento=data['fecha_nacimiento'],
+                    nacionalidad=data['nacionalidad'],
+                    fecha_fallecimiento=data['fecha_fallecimiento']
                 )
 
         self.form_frame.destroy()
-        
+            
 
     def _cancel(self):
         self.form_frame.destroy()
@@ -103,7 +103,7 @@ class FormView(Frame):
                 
             self.current_id = autor['id']
             self.nombre.set(autor.get('nombre', ''))
-            self.apellido.set(autor.get('apellidos', ''))  # Cambiar a 'apellidos'
+            self.apellidos.set(autor.get('apellidos', ''))
             self.fecha_nacimiento.set(autor.get('fecha_nacimiento', ''))
             self.nacionalidad.set(autor.get('nacionalidad', ''))
             self.fecha_fallecimiento.set(autor.get('fecha_fallecimiento', ''))
